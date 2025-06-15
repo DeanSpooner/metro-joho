@@ -1,9 +1,19 @@
 import React from "react";
 
+export type TypographyRole =
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "p"
+  | "strong";
+
 interface TypographyProps {
   children?: React.ReactNode;
   className?: string;
-  role?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p";
+  role?: TypographyRole;
 }
 
 const Typography = ({ children, className, role = "p" }: TypographyProps) => {
@@ -22,6 +32,8 @@ const Typography = ({ children, className, role = "p" }: TypographyProps) => {
       return <h6 className={className}>{children}</h6>;
     case "p":
       return <p className={className}>{children}</p>;
+    case "strong":
+      return <strong className={className}>{children}</strong>;
   }
 };
 

@@ -54,3 +54,13 @@ p {
   font-weight: 400;
   line-height: 1.75rem;
 }
+
+@keyframes bgpulse {
+  0%,
+  100% {
+    background-color: #14b8a6; /* teal-500 */
+  }
+  50% {
+    background-color: #00897b; /* teal-400 */
+  }
+}
