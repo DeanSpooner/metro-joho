@@ -1,5 +1,7 @@
+import Typography from "@/components/Typography";
 import { lines } from "@/data/lines";
 import { stations } from "@/data/stations";
+import Link from "next/link";
 
 export default function LineStationPage({
   params,
@@ -25,9 +27,12 @@ export default function LineStationPage({
 
   return (
     <main>
-      <h1>
-        {station.name} - {line.name}
-      </h1>
+      <Typography role="h1">
+        {station.name} -{" "}
+        <Link href={`/lines/${line.id}`}>
+          <strong style={{ color: line.color }}>{line.name}</strong>
+        </Link>
+      </Typography>
       <p>{station.description}</p>
 
       <h2>Timetable for {line.name}:</h2>
@@ -43,9 +48,18 @@ export default function LineStationPage({
       <ul>
         {station.lines
           .filter(l => l !== lineId)
-          .map(otherLine => (
-            <li key={otherLine}>{otherLine}</li>
-          ))}
+          .map(otherLine => {
+            const lineId = otherLine as keyof typeof lines;
+            const line = lines[lineId];
+
+            return (
+              <li key={otherLine}>
+                <Link href={`/lines/${line.id}/${station.id}`}>
+                  <strong style={{ color: line.color }}>{line.name}</strong>
+                </Link>
+              </li>
+            );
+          })}
       </ul>
     </main>
   );

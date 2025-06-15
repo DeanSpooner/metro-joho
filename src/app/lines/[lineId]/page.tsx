@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { lines } from "@/data/lines";
-import LineEmblem from "@/components/LineEmblem";
+import { stations } from "@/data/stations";
+import HorizontalEmblem from "@/components/HorizontalEmblem";
+import Typography from "@/components/Typography";
+import Page from "@/components/Page";
+import Grid from "@/components/Grid";
+import Box from "@/components/Box";
 
 export default function LinePage({ params }: { params: { lineId: string } }) {
   const lineId = params.lineId as keyof typeof lines;
@@ -11,37 +16,32 @@ export default function LinePage({ params }: { params: { lineId: string } }) {
   }
 
   return (
-    <main>
-      <h1>{line.name}</h1>
-      {/* <div
-        style={{
-          justifySelf: "center",
-          height: 100,
-          width: 100,
-          alignContent: "center",
-          justifyItems: "center",
-          backgroundColor: "white",
-          border: "red",
-          borderWidth: 20,
-          borderStyle: "solid",
-          borderRadius: 50,
-        }}
-      >
-        <h1 style={{ color: "black" }}>M</h1>
-      </div> */}
-      <LineEmblem />
-      <p>
-        Line color: <span style={{ color: line.color }}>{line.color}</span>
-      </p>
+    <>
+      <Grid>
+        <Box>
+          <Typography role="h1">{line.name}</Typography>
+        </Box>
+      </Grid>
+      <HorizontalEmblem color={line.color} text={line.initial} />
+      <Page>
+        <main>
+          <Typography role="h2">Stations on this line:</Typography>
+          <ul>
+            {line.stations.map(stationRaw => {
+              const stationId = stationRaw as keyof typeof stations;
+              const station = stations[stationId];
 
-      <h2>Stations on this line:</h2>
-      <ul>
-        {line.stations.map(stationId => (
-          <li key={stationId}>
-            <Link href={`/lines/${lineId}/${stationId}`}>{stationId}</Link>
-          </li>
-        ))}
-      </ul>
-    </main>
+              return (
+                <li key={stationId}>
+                  <Link href={`/lines/${lineId}/${stationId}`}>
+                    {station.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </main>
+      </Page>
+    </>
   );
 }
