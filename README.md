@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 東京メトロ情報 <i>(Tōkyō Metoro Jōhō)</i><br/>Tokyo Metro Information<br/>by [Dean Spooner](https://github.com/DeanSpooner)
 
-## Getting Started
+This is a web app to provide information on the Tokyo Metro transport service, including line information, station information and timetables.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- HTML;
+- TypeScript;
+- React;
+- Next.js;
+- Tailwind.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the Jōhō app
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone this repo;
+2. `cd` into the repo's root;
+3. `npm install`;
+4. `npm run dev`;
+5. Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project aims
 
-## Learn More
+- Provide information all Tokyo Metro lines;
+- Provide information on all Tokyo Metro stations;
+- Provide live status information for lines and stations, using information from the [Public Transportation Open Data Center 公共交通オープンデータセンター](https://www.odpt.org/);
+- Use i18n localisations to offer multilingual support, with English and Japanese initially supported.
 
-To learn more about Next.js, take a look at the following resources:
+# By [Dean Spooner](https://github.com/DeanSpooner)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<img src="./public/DS-loop.gif" />
