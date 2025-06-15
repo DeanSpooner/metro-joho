@@ -1,5 +1,8 @@
 import React from "react";
 import { stations } from "../../../data/stations";
+import Page from "@/components/Page";
+import Typography from "@/components/Typography";
+import Timetable from "@/components/Timetable";
 // Given page for a specific station.
 
 interface Props {
@@ -17,27 +20,25 @@ export default function StationPage({ params }: Props) {
   }
 
   return (
-    <main>
-      <h1>{station.name}</h1>
-      <p>{station.description}</p>
-      <h2>Lines:</h2>
-      <ul>
-        {station.lines.map(line => (
-          <li key={line}>{line}</li>
-        ))}
-      </ul>
+    <Page>
+      <main>
+        <Typography role="h1">{station.name}</Typography>
+        <Typography>{station.description}</Typography>
+        <Typography role="h2">Lines:</Typography>
+        <ul>
+          {station.lines.map(line => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
 
-      <h2>Timetable:</h2>
-      {Object.entries(station.timetable).map(([line, times]) => (
-        <div key={line}>
-          <h3>{line} line</h3>
-          <ul>
-            {times.map(time => (
-              <li key={time}>{time}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </main>
+        <Typography role="h2">Timetable:</Typography>
+        {Object.entries(station.timetable).map(([line, times]) => (
+          <div key={line}>
+            <Typography role="h3">{line} line</Typography>
+            <Timetable times={times} />
+          </div>
+        ))}
+      </main>
+    </Page>
   );
 }

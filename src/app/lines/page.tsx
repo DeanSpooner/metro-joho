@@ -15,7 +15,7 @@ export default function LinesPage() {
               <Link href={`/lines/${line.id}`}>
                 <strong style={{ color: line.color }}>{line.name}</strong>
               </Link>
-              <p>
+              <Typography>
                 Stations:{" "}
                 {line.stations
                   .map(stationRaw => {
@@ -24,7 +24,7 @@ export default function LinesPage() {
                     return station.name;
                   })
                   .join(", ")}
-              </p>
+              </Typography>
             </li>
           ))}
         </ul>
