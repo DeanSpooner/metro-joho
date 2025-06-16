@@ -1,6 +1,6 @@
 // Taken on 17/06/25 from https://api.odpt.org/api/v4/odpt:Station?odpt:operator=odpt.Operator:TokyoMetro&acl:consumerKey=[YOUR_ACCESS_TOKEN]
 
-export const station = [
+export const stations = [
   {
     "@id": "urn:ucode:_00001C000000000000010000030C470D",
     "@type": "odpt:Station",

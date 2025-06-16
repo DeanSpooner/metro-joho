@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { dummyLines } from "@/data/dummyLines";
-import { dummyStations } from "@/data/dummyStations";
+import { lines } from "@/data/lines";
 import HorizontalEmblem from "@/components/HorizontalEmblem";
 import Typography from "@/components/Typography";
 import Page from "@/components/Page";
@@ -8,8 +7,9 @@ import Grid from "@/components/Grid";
 import Box from "@/components/Box";
 
 export default function LinePage({ params }: { params: { lineId: string } }) {
-  const lineId = params.lineId as keyof typeof dummyLines;
-  const line = dummyLines[lineId];
+  const line = lines.find(
+    line => line["owl:sameAs"] === decodeURIComponent(params.lineId)
+  );
 
   if (!line) {
     return <div>Line not found</div>;
@@ -19,26 +19,28 @@ export default function LinePage({ params }: { params: { lineId: string } }) {
     <>
       <Grid>
         <Box>
-          <Typography role="h1">{line.name}</Typography>
+          <Typography role="h1">{line["odpt:railwayTitle"].en}</Typography>
         </Box>
       </Grid>
-      <HorizontalEmblem color={line.color} text={line.initial} />
+      <HorizontalEmblem
+        color={line["odpt:color"]}
+        text={line["odpt:lineCode"]}
+      />
       <Page>
         <main>
           <Typography role="h2">Stations on this line:</Typography>
           <ul>
-            {line.stations.map(stationRaw => {
-              const stationId = stationRaw as keyof typeof dummyStations;
-              const station = dummyStations[stationId];
-
-              return (
-                <li key={stationId}>
-                  <Link href={`/lines/${lineId}/${stationId}`}>
-                    {station.name}
-                  </Link>
-                </li>
-              );
-            })}
+            {line["odpt:stationOrder"].map(station => (
+              <li key={station["odpt:station"]}>
+                <Link
+                  href={`/lines/${encodeURIComponent(
+                    params.lineId
+                  )}/${encodeURIComponent(station["odpt:station"])}`}
+                >
+                  {station["odpt:stationTitle"].en}
+                </Link>
+              </li>
+            ))}
           </ul>
         </main>
       </Page>
