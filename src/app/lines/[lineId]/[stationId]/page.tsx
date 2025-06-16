@@ -1,8 +1,8 @@
 import Page from "@/components/Page";
 import Timetable from "@/components/Timetable";
 import Typography from "@/components/Typography";
-import { lines } from "@/data/lines";
-import { stations } from "@/data/stations";
+import { dummyLines } from "@/data/dummyLines";
+import { dummyStations } from "@/data/dummyStations";
 import Link from "next/link";
 
 export default function LineStationPage({
@@ -10,11 +10,11 @@ export default function LineStationPage({
 }: {
   params: { lineId: string; stationId: string };
 }) {
-  const lineId = params.lineId as keyof typeof lines;
-  const stationId = params.stationId as keyof typeof stations;
+  const lineId = params.lineId as keyof typeof dummyLines;
+  const stationId = params.stationId as keyof typeof dummyStations;
 
-  const line = lines[lineId];
-  const station = stations[stationId];
+  const line = dummyLines[lineId];
+  const station = dummyStations[stationId];
 
   if (!line) {
     return <div>Line not found</div>;
@@ -50,8 +50,8 @@ export default function LineStationPage({
           {station.lines
             .filter(l => l !== lineId)
             .map(otherLine => {
-              const lineId = otherLine as keyof typeof lines;
-              const line = lines[lineId];
+              const lineId = otherLine as keyof typeof dummyLines;
+              const line = dummyLines[lineId];
               return (
                 <li key={otherLine}>
                   <Link href={`/lines/${line.id}/${station.id}`}>

@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tsc": "tsc --noEmit && echo '✅ No errors! All good.'"
   },
   "dependencies": {
     "next": "15.3.3",

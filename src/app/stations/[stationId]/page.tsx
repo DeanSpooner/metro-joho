@@ -1,5 +1,5 @@
 import React from "react";
-import { stations } from "../../../data/stations";
+import { dummyStations } from "../../../data/dummyStations";
 import Page from "@/components/Page";
 import Typography from "@/components/Typography";
 import Timetable from "@/components/Timetable";
@@ -12,8 +12,8 @@ interface Props {
 }
 
 export default function StationPage({ params }: Props) {
-  const stationId = params.stationId as keyof typeof stations;
-  const station = stations[stationId];
+  const stationId = params.stationId as keyof typeof dummyStations;
+  const station = dummyStations[stationId];
 
   if (!station) {
     return <div>Station not found</div>;
