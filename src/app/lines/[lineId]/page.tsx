@@ -5,10 +5,11 @@ import Typography from "@/components/Typography";
 import Page from "@/components/Page";
 import Grid from "@/components/Grid";
 import Box from "@/components/Box";
+import { getLastSegment } from "@/utils/utilities";
 
 export default function LinePage({ params }: { params: { lineId: string } }) {
   const line = lines.find(
-    line => line["owl:sameAs"] === decodeURIComponent(params.lineId)
+    line => getLastSegment(line["owl:sameAs"]) === params.lineId
   );
 
   if (!line) {
@@ -33,9 +34,9 @@ export default function LinePage({ params }: { params: { lineId: string } }) {
             {line["odpt:stationOrder"].map(station => (
               <li key={station["odpt:station"]}>
                 <Link
-                  href={`/lines/${encodeURIComponent(
-                    params.lineId
-                  )}/${encodeURIComponent(station["odpt:station"])}`}
+                  href={`/lines/${getLastSegment(
+                    line["owl:sameAs"]
+                  )}/${getLastSegment(station["odpt:station"])}`}
                 >
                   {station["odpt:stationTitle"].en}
                 </Link>

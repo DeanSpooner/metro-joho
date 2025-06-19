@@ -2,6 +2,7 @@ import Link from "next/link";
 import { lines } from "@/data/lines";
 import Typography from "@/components/Typography";
 import Page from "@/components/Page";
+import { getLastSegment } from "@/utils/utilities";
 
 export default function LinesPage() {
   return (
@@ -11,7 +12,7 @@ export default function LinesPage() {
         <ul>
           {Object.values(lines).map(line => (
             <li key={line["@id"]}>
-              <Link href={`/lines/${encodeURIComponent(line["owl:sameAs"])}`}>
+              <Link href={`/lines/${getLastSegment(line["owl:sameAs"])}`}>
                 <strong style={{ color: line["odpt:color"] }}>
                   {line["odpt:railwayTitle"].en}
                 </strong>

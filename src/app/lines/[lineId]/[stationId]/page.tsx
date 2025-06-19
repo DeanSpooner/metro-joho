@@ -1,8 +1,9 @@
 import Page from "@/components/Page";
 import Timetable from "@/components/Timetable";
 import Typography from "@/components/Typography";
-import { dummyLines } from "@/data/dummyLines";
-import { dummyStations } from "@/data/dummyStations";
+import { lines } from "@/data/lines";
+import { stations } from "@/data/stations";
+import { getLastSegment } from "@/utils/utilities";
 import Link from "next/link";
 
 export default function LineStationPage({
@@ -10,11 +11,13 @@ export default function LineStationPage({
 }: {
   params: { lineId: string; stationId: string };
 }) {
-  const lineId = params.lineId as keyof typeof dummyLines;
-  const stationId = params.stationId as keyof typeof dummyStations;
+  const line = lines.find(
+    line => getLastSegment(line["owl:sameAs"]) === params.lineId
+  );
 
-  const line = dummyLines[lineId];
-  const station = dummyStations[stationId];
+  const station = stations.find(
+    station => getLastSegment(station["owl:sameAs"]) === params.stationId
+  );
 
   if (!line) {
     return <div>Line not found</div>;
@@ -23,21 +26,22 @@ export default function LineStationPage({
     return <div>Station not found</div>;
   }
 
-  // Show timetable for this line at this station
-  const timetable =
-    (station.timetable as Record<string, string[]>)[lineId] || [];
+  const timetable: string | never[] = [];
 
   return (
     <Page>
       <main>
         <Typography role="h1">
-          {station.name} -{" "}
-          <Link href={`/lines/${line.id}`}>
-            <strong style={{ color: line.color }}>{line.name}</strong>
+          {station["odpt:stationTitle"].en} -{" "}
+          <Link href={`/lines/${line["owl:sameAs"]}`}>
+            <strong style={{ color: line["odpt:color"] }}>
+              {line["odpt:railwayTitle"].en}
+            </strong>
           </Link>
         </Typography>
-        <Typography>{station.description}</Typography>
-        <Typography role="h2">Timetable for {line.name}:</Typography>
+        <Typography role="h2">
+          Timetable for {line["odpt:railwayTitle"].en}:
+        </Typography>
         <ul>
           {timetable.length > 0 ? (
             <Timetable times={timetable} />
@@ -47,15 +51,39 @@ export default function LineStationPage({
         </ul>
         <Typography role="h2">Other lines at this station:</Typography>
         <ul>
-          {station.lines
-            .filter(l => l !== lineId)
-            .map(otherLine => {
-              const lineId = otherLine as keyof typeof dummyLines;
-              const line = dummyLines[lineId];
+          {stations
+            .filter(otherStation => {
+              const otherStationShortId = getLastSegment(
+                otherStation["owl:sameAs"]
+              );
+              const otherLineShortId = getLastSegment(
+                otherStation["odpt:railway"]
+              );
+
+              // Return all stations that share the same station ID
+              // but have a different line ID
               return (
-                <li key={otherLine}>
-                  <Link href={`/lines/${line.id}/${station.id}`}>
-                    <strong style={{ color: line.color }}>{line.name}</strong>
+                otherStationShortId === params.stationId &&
+                otherLineShortId !== params.lineId
+              );
+            })
+            .map(otherStation => {
+              const otherLine = lines.find(
+                line =>
+                  line["owl:sameAs"] === otherStation["odpt:railway"] &&
+                  getLastSegment(line["owl:sameAs"]) !== params.lineId
+              );
+              if (!otherLine) return null;
+
+              const lineShortId = getLastSegment(otherLine["owl:sameAs"]);
+              const stationShortId = getLastSegment(otherStation["owl:sameAs"]);
+
+              return (
+                <li key={otherLine["@id"]}>
+                  <Link href={`/lines/${lineShortId}/${stationShortId}`}>
+                    <strong style={{ color: otherLine["odpt:color"] }}>
+                      {otherLine["odpt:railwayTitle"].en}
+                    </strong>
                   </Link>
                 </li>
               );
