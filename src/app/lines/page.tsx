@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { lines } from "@/data/lines";
 import Typography from "@/components/Typography";
-import Page from "@/components/Page";
 import { getLastSegment } from "@/utils/utilities";
+import PageWithHeader from "@/components/PageWithHeader";
 
 export default function LinesPage() {
   return (
-    <Page>
+    <PageWithHeader>
       <main>
         <Typography role="h1">Tokyo Metro Lines</Typography>
         <ul>
@@ -29,6 +29,6 @@ export default function LinesPage() {
           ))}
         </ul>
       </main>
-    </Page>
+    </PageWithHeader>
   );
 }

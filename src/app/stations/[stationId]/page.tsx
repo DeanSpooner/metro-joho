@@ -1,8 +1,8 @@
 import React from "react";
 import { dummyStations } from "../../../data/dummyStations";
-import Page from "@/components/Page";
 import Typography from "@/components/Typography";
 import Timetable from "@/components/Timetable";
+import PageWithHeader from "@/components/PageWithHeader";
 // Given page for a specific station.
 
 interface Props {
@@ -20,7 +20,7 @@ export default function StationPage({ params }: Props) {
   }
 
   return (
-    <Page>
+    <PageWithHeader>
       <main>
         <Typography role="h1">{station.name}</Typography>
         <Typography>{station.description}</Typography>
@@ -39,6 +39,6 @@ export default function StationPage({ params }: Props) {
           </div>
         ))}
       </main>
-    </Page>
+    </PageWithHeader>
   );
 }

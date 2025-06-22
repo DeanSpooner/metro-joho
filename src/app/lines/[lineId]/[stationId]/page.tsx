@@ -1,4 +1,4 @@
-import Page from "@/components/Page";
+import PageWithHeader from "@/components/PageWithHeader";
 import Timetable from "@/components/Timetable";
 import Typography from "@/components/Typography";
 import { lines } from "@/data/lines";
@@ -29,7 +29,7 @@ export default function LineStationPage({
   const timetable: string | never[] = [];
 
   return (
-    <Page>
+    <PageWithHeader>
       <main>
         <Typography role="h1">
           {station["odpt:stationTitle"].en} -{" "}
@@ -90,6 +90,6 @@ export default function LineStationPage({
             })}
         </ul>
       </main>
-    </Page>
+    </PageWithHeader>
   );
 }

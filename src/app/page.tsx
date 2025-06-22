@@ -1,21 +1,14 @@
-import Link from "next/link";
 import Typography from "@/components/Typography";
-import Page from "@/components/Page";
+import PageWithHeader from "@/components/PageWithHeader";
 
 export default function Home() {
   return (
-    <Page>
-      <Typography role="h1" className="col-span-12">
+    <PageWithHeader>
+      <Typography role="h1">
         東京メトロ情報へようこそ！
+        <br />
+        Welcome to the Tokyo Metro Information Portal!
       </Typography>
-      <nav className="mt-6 space-x-4">
-        <Link href="/lines" className="text-blue-600 hover:underline">
-          View All Lines
-        </Link>
-        <Link href="/stations" className="text-blue-600 hover:underline">
-          View All Stations
-        </Link>
-      </nav>
-    </Page>
+    </PageWithHeader>
   );
 }

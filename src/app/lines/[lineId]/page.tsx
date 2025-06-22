@@ -6,6 +6,7 @@ import Page from "@/components/Page";
 import Grid from "@/components/Grid";
 import Box from "@/components/Box";
 import { getLastSegment } from "@/utils/utilities";
+import Header from "@/components/Header";
 
 export default function LinePage({ params }: { params: { lineId: string } }) {
   const line = lines.find(
@@ -19,6 +20,9 @@ export default function LinePage({ params }: { params: { lineId: string } }) {
   return (
     <>
       <Grid>
+        <Box>
+          <Header />
+        </Box>
         <Box>
           <Typography role="h1">{line["odpt:railwayTitle"].en}</Typography>
         </Box>

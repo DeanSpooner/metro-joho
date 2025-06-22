@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { dummyStations } from "@/data/dummyStations";
-import Page from "@/components/Page";
 import Typography from "@/components/Typography";
+import PageWithHeader from "@/components/PageWithHeader";
 
 export default function StationsPage() {
   return (
-    <Page>
+    <PageWithHeader>
       <main>
         <Typography role="h1">Tokyo Metro Stations</Typography>
         <ul>
@@ -16,6 +16,6 @@ export default function StationsPage() {
           ))}
         </ul>
       </main>
-    </Page>
+    </PageWithHeader>
   );
 }
