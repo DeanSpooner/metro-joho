@@ -3,9 +3,15 @@ import Grid from "./Grid";
 import Box from "./Box";
 import Header from "./Header";
 
-const Page = ({ children }: { children?: React.ReactNode }) => {
+const Page = ({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) => {
   return (
-    <Grid>
+    <Grid className={className}>
       <Box>
         <Header />
       </Box>

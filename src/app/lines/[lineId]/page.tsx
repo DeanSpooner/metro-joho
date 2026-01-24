@@ -10,7 +10,7 @@ import Header from "@/components/Header";
 
 export default function LinePage({ params }: { params: { lineId: string } }) {
   const line = lines.find(
-    line => getLastSegment(line["owl:sameAs"]) === params.lineId
+    (line) => getLastSegment(line["owl:sameAs"]) === params.lineId
   );
 
   if (!line) {
@@ -35,7 +35,7 @@ export default function LinePage({ params }: { params: { lineId: string } }) {
         <main>
           <Typography role="h2">Stations on this line:</Typography>
           <ul>
-            {line["odpt:stationOrder"].map(station => (
+            {line["odpt:stationOrder"].map((station) => (
               <li key={station["odpt:station"]}>
                 <Link
                   href={`/lines/${getLastSegment(

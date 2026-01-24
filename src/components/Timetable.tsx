@@ -73,7 +73,7 @@ const Timetable = ({ times }: TimetableProps) => {
   return (
     <Grid className="px-[0] py-[16px]">
       <Clock />
-      {times.map(time => getTimetableTimeBox(time))}
+      {times.map((time) => getTimetableTimeBox(time))}
     </Grid>
   );
 };

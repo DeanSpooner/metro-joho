@@ -4,6 +4,7 @@ import Typography from "@/components/Typography";
 import { lines } from "@/data/lines";
 import { stations } from "@/data/stations";
 import { getLastSegment } from "@/utils/utilities";
+import { getTimetableForLine } from "@/utils/stationUtils";
 import Link from "next/link";
 
 export default function LineStationPage({
@@ -12,11 +13,11 @@ export default function LineStationPage({
   params: { lineId: string; stationId: string };
 }) {
   const line = lines.find(
-    line => getLastSegment(line["owl:sameAs"]) === params.lineId
+    (line) => getLastSegment(line["owl:sameAs"]) === params.lineId
   );
 
   const station = stations.find(
-    station => getLastSegment(station["owl:sameAs"]) === params.stationId
+    (station) => getLastSegment(station["owl:sameAs"]) === params.stationId
   );
 
   if (!line) {
@@ -26,7 +27,7 @@ export default function LineStationPage({
     return <div>Station not found</div>;
   }
 
-  const timetable: string | never[] = [];
+  const timetable = getTimetableForLine(params.lineId, params.stationId);
 
   return (
     <PageWithHeader>
@@ -52,7 +53,7 @@ export default function LineStationPage({
         <Typography role="h2">Other lines at this station:</Typography>
         <ul>
           {stations
-            .filter(otherStation => {
+            .filter((otherStation) => {
               const otherStationShortId = getLastSegment(
                 otherStation["owl:sameAs"]
               );
@@ -67,9 +68,9 @@ export default function LineStationPage({
                 otherLineShortId !== params.lineId
               );
             })
-            .map(otherStation => {
+            .map((otherStation) => {
               const otherLine = lines.find(
-                line =>
+                (line) =>
                   line["owl:sameAs"] === otherStation["odpt:railway"] &&
                   getLastSegment(line["owl:sameAs"]) !== params.lineId
               );

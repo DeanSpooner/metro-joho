@@ -1,15 +1,17 @@
 import Link from "next/link";
-import { dummyStations } from "@/data/dummyStations";
 import Typography from "@/components/Typography";
 import PageWithHeader from "@/components/PageWithHeader";
+import { getAllStations } from "@/utils/stationUtils";
 
 export default function StationsPage() {
+  const stations = getAllStations();
+
   return (
     <PageWithHeader>
       <main>
         <Typography role="h1">Tokyo Metro Stations</Typography>
         <ul>
-          {Object.values(dummyStations).map(station => (
+          {stations.map((station) => (
             <li key={station.id}>
               <Link href={`/stations/${station.id}`}>{station.name}</Link>
             </li>

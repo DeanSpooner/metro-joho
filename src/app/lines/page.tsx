@@ -10,7 +10,7 @@ export default function LinesPage() {
       <main>
         <Typography role="h1">Tokyo Metro Lines</Typography>
         <ul>
-          {Object.values(lines).map(line => (
+          {Object.values(lines).map((line) => (
             <li key={line["@id"]}>
               <Link href={`/lines/${getLastSegment(line["owl:sameAs"])}`}>
                 <strong style={{ color: line["odpt:color"] }}>
@@ -20,7 +20,7 @@ export default function LinesPage() {
               <Typography>
                 Stations:{" "}
                 {line["odpt:stationOrder"]
-                  .map(station => {
+                  .map((station) => {
                     return station["odpt:stationTitle"].en;
                   })
                   .join(", ")}
