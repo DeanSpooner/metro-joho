@@ -1,5 +1,5 @@
 import React from "react";
-import TokyoMetroLogo from "../../public/TokyoMetroLogo.svg"; // Adjust the path as necessary
+import TokyoMetroLogo from "../../public/TokyoMetroLogo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import Grid from "./Grid";

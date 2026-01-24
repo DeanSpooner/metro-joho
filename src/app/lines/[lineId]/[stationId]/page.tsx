@@ -61,8 +61,6 @@ export default function LineStationPage({
                 otherStation["odpt:railway"]
               );
 
-              // Return all stations that share the same station ID
-              // but have a different line ID
               return (
                 otherStationShortId === params.stationId &&
                 otherLineShortId !== params.lineId

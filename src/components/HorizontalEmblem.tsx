@@ -18,7 +18,7 @@ const HorizontalEmblem = ({ color, text }: HorizontalEmblemTypes) => {
     const circle = circleRef.current;
     if (!leftLine || !rightLine || !circle) return;
 
-    // Animate left line
+
     leftLine.style.transition = "width 1s ease-in";
     leftLine.style.width = "100%";
 
@@ -57,7 +57,7 @@ const HorizontalEmblem = ({ color, text }: HorizontalEmblemTypes) => {
         right: 16,
       }}
     >
-      {/* Left line */}
+
       <div
         style={{
           width: "50%",
@@ -75,7 +75,7 @@ const HorizontalEmblem = ({ color, text }: HorizontalEmblemTypes) => {
           }}
         />
       </div>
-      {/* Circle */}
+
       <div
         style={{
           position: "absolute",
@@ -118,7 +118,7 @@ const HorizontalEmblem = ({ color, text }: HorizontalEmblemTypes) => {
           {text}
         </p>
       </div>
-      {/* Right line */}
+
       <div style={{ width: "50%", height: 110, alignContent: "flex-end" }}>
         <div
           ref={rightLineRef}

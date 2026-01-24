@@ -12,7 +12,7 @@ const Clock = () => {
       setCurrentTime(getCurrentJapanTime());
     }, 1000);
 
-    return () => clearInterval(interval); // cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
 
   return (

@@ -909,7 +909,7 @@ export const dummyStations = {
     },
   },
 
-  // Yurakucho Line new stations
+
   wakoshi: {
     id: "wakoshi",
     name: "Wakoshi",
@@ -950,7 +950,7 @@ export const dummyStations = {
     },
   },
 
-  // Namboku Line new stations
+
   meguro: {
     id: "meguro",
     name: "Meguro",
@@ -997,7 +997,7 @@ export const dummyStations = {
     },
   },
 
-  // Fukutoshin Line new stations
+
   "shinjuku-sanchome": {
     id: "shinjuku-sanchome",
     name: "Shinjuku-Sanchome",
@@ -1017,7 +1017,7 @@ export const dummyStations = {
     },
   },
 
-  // Hibiya Line new stations
+
   "naka-meguro": {
     id: "naka-meguro",
     name: "Naka-Meguro",
