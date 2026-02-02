@@ -5,14 +5,14 @@ import Timetable from "@/components/Timetable";
 import PageWithHeader from "@/components/PageWithHeader";
 
 interface Props {
-  params: {
+  params: Promise<{
     stationId: string;
-  };
+  }>;
 }
 
-export default function StationPage({ params }: Props) {
-  const { stationId } = params;
-  const station = getStationData(stationId);
+export default async function StationPage({ params }: Props) {
+  const { stationId } = await params;
+  const station = await getStationData(stationId);
 
   if (!station) {
     return (

@@ -14,9 +14,10 @@ This is a web app to provide information on the Tokyo Metro transport service, i
 
 1. Clone this repo;
 2. `cd` into the repo's root;
-3. `npm install`;
-4. `npm run dev`;
-5. Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
+3. Create a `.env.local` file, with `ODPT_ACCESS_TOKEN=yourAccessToken` - this will require you to register with the [Public Transportation Open Data Center 公共交通オープンデータセンター](https://www.odpt.org/) and request an access token;
+4. `npm install`;
+5. `npm run dev`;
+6. Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Project aims
 

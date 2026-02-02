@@ -3,8 +3,8 @@ import Typography from "@/components/Typography";
 import PageWithHeader from "@/components/PageWithHeader";
 import { getAllStations } from "@/utils/stationUtils";
 
-export default function StationsPage() {
-  const stations = getAllStations();
+export default async function StationsPage() {
+  const stations = await getAllStations();
 
   return (
     <PageWithHeader>

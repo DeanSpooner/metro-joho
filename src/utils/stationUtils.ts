@@ -1,6 +1,4 @@
-import { stations } from "../data/stations";
-import { stationTimetables } from "../data/stationTimetables";
-import { dummyStations } from "../data/dummyStations";
+import { odptClient } from "./odptClient";
 import { getLastSegment } from "./utilities";
 
 export interface StationData {
@@ -11,7 +9,6 @@ export interface StationData {
   timetable: Record<string, string[]>;
 }
 
-const STATION_PREFIX = "odpt.Station:TokyoMetro.";
 const RAILWAY_PREFIX = "odpt.Railway:TokyoMetro.";
 
 const normalizeId = (name: string) =>
@@ -21,7 +18,8 @@ const getLineId = (railwayUrn: string) => {
   return railwayUrn.replace(RAILWAY_PREFIX, "").toLowerCase();
 };
 
-export const getAllStations = () => {
+export const getAllStations = async () => {
+  const stations = (await odptClient.getStations()) as any[];
   const uniqueStations = new Map<string, { name: string; id: string }>();
 
   stations.forEach((station) => {
@@ -38,44 +36,34 @@ export const getAllStations = () => {
   );
 };
 
-export const getStationData = (stationId: string): StationData | null => {
+export const getStationData = async (stationId: string): Promise<StationData | null> => {
+  const stations = (await odptClient.getStations()) as any[];
   const matchingStations = stations.filter((s) => {
     const name = s["odpt:stationTitle"]?.en;
     return name && normalizeId(name) === stationId;
   });
 
   if (matchingStations.length === 0) {
-    const dummy = (dummyStations as any)[stationId];
-    if (dummy) return dummy;
     return null;
   }
 
   const firstMatch = matchingStations[0];
   const name = firstMatch["odpt:stationTitle"].en;
-
-  const dummyKey = Object.keys(dummyStations).find(
-    (k) =>
-      k === stationId ||
-      normalizeId((dummyStations as any)[k].name) === stationId
-  );
-  const description = dummyKey
-    ? (dummyStations as any)[dummyKey].description
-    : "Tokyo Metro Station";
+  const description = "Tokyo Metro Station";
 
   const lines = new Set<string>();
   const timetable: Record<string, string[]> = {};
 
-  matchingStations.forEach((station) => {
+  for (const station of matchingStations) {
     const railway = station["odpt:railway"];
     const lineId = getLineId(railway);
     lines.add(lineId);
 
     const timetableIds = station["odpt:stationTimetable"] || [];
-
-    timetableIds.forEach((ttId) => {
-      const ttData = stationTimetables.find((t) => t["owl:sameAs"] === ttId);
-
-      if (ttData) {
+    if (timetableIds.length > 0) {
+      const ttDataList = (await odptClient.getStationTimetables(station["owl:sameAs"])) as any[];
+      
+      ttDataList.forEach((ttData) => {
         if (!timetable[lineId]) {
           timetable[lineId] = [];
         }
@@ -86,9 +74,9 @@ export const getStationData = (stationId: string): StationData | null => {
             timetable[lineId].push(train["odpt:departureTime"]);
           }
         });
-      }
-    });
-  });
+      });
+    }
+  }
 
   Object.keys(timetable).forEach((line) => {
     timetable[line] = Array.from(new Set(timetable[line])).sort();
@@ -103,10 +91,11 @@ export const getStationData = (stationId: string): StationData | null => {
   };
 };
 
-export const getTimetableForLine = (
+export const getTimetableForLine = async (
   lineId: string,
   stationName: string
-): string[] => {
+): Promise<string[]> => {
+  const stations = (await odptClient.getStations()) as any[];
   const stationEntry = stations.find(
     (s) =>
       getLastSegment(s["owl:sameAs"]).toLowerCase() ===
@@ -116,19 +105,16 @@ export const getTimetableForLine = (
 
   if (!stationEntry) return [];
 
-  const timetableIds = stationEntry["odpt:stationTimetable"] || [];
+  const ttDataList = (await odptClient.getStationTimetables(stationEntry["owl:sameAs"])) as any[];
   const times: string[] = [];
 
-  timetableIds.forEach((ttId) => {
-    const ttData = stationTimetables.find((t) => t["owl:sameAs"] === ttId);
-    if (ttData) {
-      const trainTimetables = ttData["odpt:stationTimetableObject"] || [];
-      trainTimetables.forEach((train: any) => {
-        if (train["odpt:departureTime"]) {
-          times.push(train["odpt:departureTime"]);
-        }
-      });
-    }
+  ttDataList.forEach((ttData) => {
+    const trainTimetables = ttData["odpt:stationTimetableObject"] || [];
+    trainTimetables.forEach((train: any) => {
+      if (train["odpt:departureTime"]) {
+        times.push(train["odpt:departureTime"]);
+      }
+    });
   });
 
   return Array.from(new Set(times)).sort();

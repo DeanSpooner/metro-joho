@@ -1,24 +1,26 @@
 import PageWithHeader from "@/components/PageWithHeader";
 import Timetable from "@/components/Timetable";
 import Typography from "@/components/Typography";
-import { lines } from "@/data/lines";
-import { stations } from "@/data/stations";
+import { odptClient } from "@/utils/odptClient";
 import { getLastSegment } from "@/utils/utilities";
 import { getTimetableForLine } from "@/utils/stationUtils";
 import Link from "next/link";
 
-export default function LineStationPage({
+export default async function LineStationPage({
   params,
 }: {
-  params: { lineId: string; stationId: string };
+  params: Promise<{ lineId: string; stationId: string }>;
 }) {
-  const line = lines.find(
-    (line) => getLastSegment(line["owl:sameAs"]) === params.lineId
+  const { lineId, stationId } = await params;
+  const lineResponse = await odptClient.getRailway(
+    `odpt.Railway:TokyoMetro.${lineId}`
   );
+  const line = (lineResponse as any)[0];
 
-  const station = stations.find(
-    (station) => getLastSegment(station["owl:sameAs"]) === params.stationId
+  const stationResponse = await odptClient.getStation(
+    `odpt.Station:TokyoMetro.${lineId}.${stationId}`
   );
+  const station = (stationResponse as any)[0];
 
   if (!line) {
     return <div>Line not found</div>;
@@ -27,14 +29,26 @@ export default function LineStationPage({
     return <div>Station not found</div>;
   }
 
-  const timetable = getTimetableForLine(params.lineId, params.stationId);
+  const timetable = await getTimetableForLine(lineId, stationId);
+
+  // Fetch other stations at this location to show "Other lines at this station"
+  const allStations = (await odptClient.getStations()) as any[];
+  const sameStationOtherLines = allStations.filter((otherStation) => {
+    const otherStationShortId = getLastSegment(otherStation["owl:sameAs"]);
+    const otherLineShortId = getLastSegment(otherStation["odpt:railway"]);
+
+    return (
+      otherStationShortId === stationId &&
+      otherLineShortId !== lineId
+    );
+  });
 
   return (
     <PageWithHeader>
       <main>
         <Typography role="h1">
           {station["odpt:stationTitle"].en} -{" "}
-          <Link href={`/lines/${line["owl:sameAs"]}`}>
+          <Link href={`/lines/${getLastSegment(line["owl:sameAs"])}`}>
             <strong style={{ color: line["odpt:color"] }}>
               {line["odpt:railwayTitle"].en}
             </strong>
@@ -52,41 +66,34 @@ export default function LineStationPage({
         </ul>
         <Typography role="h2">Other lines at this station:</Typography>
         <ul>
-          {stations
-            .filter((otherStation) => {
-              const otherStationShortId = getLastSegment(
-                otherStation["owl:sameAs"]
-              );
-              const otherLineShortId = getLastSegment(
-                otherStation["odpt:railway"]
-              );
+          {sameStationOtherLines.length > 0 ? (
+            await Promise.all(
+              sameStationOtherLines.map(async (otherStation) => {
+                const otherLineResponse = await odptClient.getRailway(
+                  otherStation["odpt:railway"]
+                );
+                const otherLine = (otherLineResponse as any)[0];
+                if (!otherLine) return null;
 
-              return (
-                otherStationShortId === params.stationId &&
-                otherLineShortId !== params.lineId
-              );
-            })
-            .map((otherStation) => {
-              const otherLine = lines.find(
-                (line) =>
-                  line["owl:sameAs"] === otherStation["odpt:railway"] &&
-                  getLastSegment(line["owl:sameAs"]) !== params.lineId
-              );
-              if (!otherLine) return null;
+                const lineShortId = getLastSegment(otherLine["owl:sameAs"]);
+                const stationShortId = getLastSegment(
+                  otherStation["owl:sameAs"]
+                );
 
-              const lineShortId = getLastSegment(otherLine["owl:sameAs"]);
-              const stationShortId = getLastSegment(otherStation["owl:sameAs"]);
-
-              return (
-                <li key={otherLine["@id"]}>
-                  <Link href={`/lines/${lineShortId}/${stationShortId}`}>
-                    <strong style={{ color: otherLine["odpt:color"] }}>
-                      {otherLine["odpt:railwayTitle"].en}
-                    </strong>
-                  </Link>
-                </li>
-              );
-            })}
+                return (
+                  <li key={otherLine["@id"]}>
+                    <Link href={`/lines/${lineShortId}/${stationShortId}`}>
+                      <strong style={{ color: otherLine["odpt:color"] }}>
+                        {otherLine["odpt:railwayTitle"].en}
+                      </strong>
+                    </Link>
+                  </li>
+                );
+              })
+            )
+          ) : (
+            <li>None</li>
+          )}
         </ul>
       </main>
     </PageWithHeader>

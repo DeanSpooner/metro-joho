@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { lines } from "@/data/lines";
+import { odptClient } from "@/utils/odptClient";
 import HorizontalEmblem from "@/components/HorizontalEmblem";
 import Typography from "@/components/Typography";
 import Page from "@/components/Page";
@@ -8,10 +8,12 @@ import Box from "@/components/Box";
 import { getLastSegment } from "@/utils/utilities";
 import Header from "@/components/Header";
 
-export default function LinePage({ params }: { params: { lineId: string } }) {
-  const line = lines.find(
-    (line) => getLastSegment(line["owl:sameAs"]) === params.lineId
+export default async function LinePage({ params }: { params: Promise<{ lineId: string }> }) {
+  const { lineId } = await params;
+  const lineResponse = await odptClient.getRailway(
+    `odpt.Railway:TokyoMetro.${lineId}`
   );
+  const line = (lineResponse as any)[0];
 
   if (!line) {
     return <div>Line not found</div>;
@@ -35,14 +37,14 @@ export default function LinePage({ params }: { params: { lineId: string } }) {
         <main>
           <Typography role="h2">Stations on this line:</Typography>
           <ul>
-            {line["odpt:stationOrder"].map((station) => (
+            {line["odpt:stationOrder"].map((station: any) => (
               <li key={station["odpt:station"]}>
                 <Link
                   href={`/lines/${getLastSegment(
                     line["owl:sameAs"]
                   )}/${getLastSegment(station["odpt:station"])}`}
                 >
-                  {station["odpt:stationTitle"].en}
+                  {station["odpt:stationTitle"]?.en || getLastSegment(station["odpt:station"])}
                 </Link>
               </li>
             ))}

@@ -1,16 +1,18 @@
 import Link from "next/link";
-import { lines } from "@/data/lines";
+import { odptClient } from "@/utils/odptClient";
 import Typography from "@/components/Typography";
 import { getLastSegment } from "@/utils/utilities";
 import PageWithHeader from "@/components/PageWithHeader";
 
-export default function LinesPage() {
+export default async function LinesPage() {
+  const lines = (await odptClient.getRailways()) as any[];
+
   return (
     <PageWithHeader>
       <main>
         <Typography role="h1">Tokyo Metro Lines</Typography>
         <ul>
-          {Object.values(lines).map((line) => (
+          {lines.map((line) => (
             <li key={line["@id"]}>
               <Link href={`/lines/${getLastSegment(line["owl:sameAs"])}`}>
                 <strong style={{ color: line["odpt:color"] }}>
@@ -20,8 +22,11 @@ export default function LinesPage() {
               <Typography>
                 Stations:{" "}
                 {line["odpt:stationOrder"]
-                  .map((station) => {
-                    return station["odpt:stationTitle"].en;
+                  .map((station: any) => {
+                    return (
+                      station["odpt:stationTitle"]?.en ||
+                      getLastSegment(station["odpt:station"])
+                    );
                   })
                   .join(", ")}
               </Typography>
