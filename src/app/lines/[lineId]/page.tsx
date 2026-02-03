@@ -13,7 +13,7 @@ export default async function LinePage({ params }: { params: Promise<{ lineId: s
   const lineResponse = await odptClient.getRailway(
     `odpt.Railway:TokyoMetro.${lineId}`
   );
-  const line = (lineResponse as any)[0];
+  const line = lineResponse[0];
 
   if (!line) {
     return <div>Line not found</div>;
@@ -37,7 +37,7 @@ export default async function LinePage({ params }: { params: Promise<{ lineId: s
         <main>
           <Typography role="h2">Stations on this line:</Typography>
           <ul>
-            {line["odpt:stationOrder"].map((station: any) => (
+            {line["odpt:stationOrder"].map((station) => (
               <li key={station["odpt:station"]}>
                 <Link
                   href={`/lines/${getLastSegment(

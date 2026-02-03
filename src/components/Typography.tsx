@@ -1,12 +1,36 @@
 import React from "react";
-import { Zen_Kaku_Gothic_New } from "next/font/google";
 import { twMerge } from "tailwind-merge";
+import localFont from "next/font/local";
 
-const zenKakuGothicNewJP = Zen_Kaku_Gothic_New({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700", "900"],
+const zenKakuGothicNewJP = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Zen_Kaku_Gothic_New/ZenKakuGothicNew-Light.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Zen_Kaku_Gothic_New/ZenKakuGothicNew-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Zen_Kaku_Gothic_New/ZenKakuGothicNew-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Zen_Kaku_Gothic_New/ZenKakuGothicNew-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Zen_Kaku_Gothic_New/ZenKakuGothicNew-Black.ttf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
   variable: "--font-zen-kaku-gothic-new-jp",
-  display: "swap",
 });
 
 export type TypographyRole =
@@ -32,89 +56,18 @@ const Typography = ({
   role = "p",
   font = "noto",
 }: TypographyProps) => {
-  switch (role) {
-    case "h1":
-      return (
-        <h1
-          className={twMerge(
-            font === "zenKaku" ? zenKakuGothicNewJP.className : "",
-            className
-          )}
-        >
-          {children}
-        </h1>
-      );
-    case "h2":
-      return (
-        <h2
-          className={`${
-            font === "zenKaku" ? zenKakuGothicNewJP.className : ""
-          } ${className}`}
-        >
-          {children}
-        </h2>
-      );
-    case "h3":
-      return (
-        <h3
-          className={`${
-            font === "zenKaku" ? zenKakuGothicNewJP.className : ""
-          } ${className}`}
-        >
-          {children}
-        </h3>
-      );
-    case "h4":
-      return (
-        <h4
-          className={`${
-            font === "zenKaku" ? zenKakuGothicNewJP.className : ""
-          } ${className}`}
-        >
-          {children}
-        </h4>
-      );
-    case "h5":
-      return (
-        <h5
-          className={`${
-            font === "zenKaku" ? zenKakuGothicNewJP.className : ""
-          } ${className}`}
-        >
-          {children}
-        </h5>
-      );
-    case "h6":
-      return (
-        <h6
-          className={`${
-            font === "zenKaku" ? zenKakuGothicNewJP.className : ""
-          } ${className}`}
-        >
-          {children}
-        </h6>
-      );
-    case "p":
-      return (
-        <p
-          className={`${
-            font === "zenKaku" ? zenKakuGothicNewJP.className : ""
-          } ${className}`}
-        >
-          {children}
-        </p>
-      );
-    case "strong":
-      return (
-        <strong
-          className={`${
-            font === "zenKaku" ? zenKakuGothicNewJP.className : ""
-          } ${className}`}
-        >
-          {children}
-        </strong>
-      );
-  }
+  const Component = role as React.ElementType;
+
+  return (
+    <Component
+      className={twMerge(
+        font === "zenKaku" ? zenKakuGothicNewJP.className : "",
+        className
+      )}
+    >
+      {children}
+    </Component>
+  );
 };
 
 export default Typography;

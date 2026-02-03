@@ -5,7 +5,7 @@ import { getLastSegment } from "@/utils/utilities";
 import PageWithHeader from "@/components/PageWithHeader";
 
 export default async function LinesPage() {
-  const lines = (await odptClient.getRailways()) as any[];
+  const lines = await odptClient.getRailways();
 
   return (
     <PageWithHeader>
@@ -22,7 +22,7 @@ export default async function LinesPage() {
               <Typography>
                 Stations:{" "}
                 {line["odpt:stationOrder"]
-                  .map((station: any) => {
+                  .map((station) => {
                     return (
                       station["odpt:stationTitle"]?.en ||
                       getLastSegment(station["odpt:station"])

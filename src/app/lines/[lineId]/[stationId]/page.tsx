@@ -15,12 +15,12 @@ export default async function LineStationPage({
   const lineResponse = await odptClient.getRailway(
     `odpt.Railway:TokyoMetro.${lineId}`
   );
-  const line = (lineResponse as any)[0];
+  const line = lineResponse[0];
 
   const stationResponse = await odptClient.getStation(
     `odpt.Station:TokyoMetro.${lineId}.${stationId}`
   );
-  const station = (stationResponse as any)[0];
+  const station = stationResponse[0];
 
   if (!line) {
     return <div>Line not found</div>;
@@ -32,7 +32,7 @@ export default async function LineStationPage({
   const timetable = await getTimetableForLine(lineId, stationId);
 
   // Fetch other stations at this location to show "Other lines at this station"
-  const allStations = (await odptClient.getStations()) as any[];
+  const allStations = await odptClient.getStations();
   const sameStationOtherLines = allStations.filter((otherStation) => {
     const otherStationShortId = getLastSegment(otherStation["owl:sameAs"]);
     const otherLineShortId = getLastSegment(otherStation["odpt:railway"]);
@@ -72,7 +72,7 @@ export default async function LineStationPage({
                 const otherLineResponse = await odptClient.getRailway(
                   otherStation["odpt:railway"]
                 );
-                const otherLine = (otherLineResponse as any)[0];
+                const otherLine = otherLineResponse[0];
                 if (!otherLine) return null;
 
                 const lineShortId = getLastSegment(otherLine["owl:sameAs"]);
