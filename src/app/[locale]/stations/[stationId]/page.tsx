@@ -50,7 +50,7 @@ export default async function StationPage({ params }: Props) {
             return (
               <div key={line.id} className="mb-6">
                 <Typography role="h3" className="capitalize">
-                  {line.name} {dict.lines.line}
+                  {line.name}
                 </Typography>
                 {times.length > 0 ? (
                   <Timetable times={times} clockLabel={dict.common.japanTime} />

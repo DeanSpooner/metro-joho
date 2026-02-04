@@ -56,7 +56,7 @@ export default async function LineStationPage({
           </Link>
         </Typography>
         <Typography role="h2">
-          {dict.timetable.title} {dict.lines.line} {getLocalizedTitle(line["odpt:railwayTitle"], locale)}:
+          {dict.timetable.title}:
         </Typography>
         <ul>
           {timetable.length > 0 ? (
