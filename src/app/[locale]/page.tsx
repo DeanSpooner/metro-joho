@@ -7,6 +7,19 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
   const { locale } = await params;
   const dict = await getDictionary(locale);
 
+  const tokyoMetroLocale = (() => {
+    switch (locale) {
+      case 'ja':
+        return '';
+      case 'zh':
+        return 'cn/';
+      case 'ko':
+        return 'kr/';
+      default:
+        return 'en/';
+    }
+  })();
+
   return (
     <PageWithHeader
       locale={locale}
@@ -20,7 +33,7 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
         </Typography>
         <div className="flex flex-col md:flex-row gap-4">
           <a
-            href="https://www.odpt.org/en/"
+            href={`https://www.odpt.org/${locale === 'ja' ? '' : 'en/'}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 bg-red-500 p-8 rounded-lg block hover:bg-red-600 transition-colors text-left"
@@ -31,7 +44,7 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
             </Typography>
           </a>
           <a
-            href="https://www.tokyometro.jp/en/index.html"
+            href={`https://www.tokyometro.jp/${tokyoMetroLocale}index.html`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 bg-blue-500 p-8 rounded-lg block hover:bg-blue-600 transition-colors text-left"
