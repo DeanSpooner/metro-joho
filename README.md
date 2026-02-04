@@ -8,7 +8,8 @@ This is a web app to provide information on the Tokyo Metro transport service, i
 - TypeScript;
 - React;
 - Next.js;
-- Tailwind.
+- Tailwind
+- i18n.
 
 ## Running the Jōhō app
 
@@ -19,12 +20,12 @@ This is a web app to provide information on the Tokyo Metro transport service, i
 5. `npm run dev`;
 6. Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project aims
+## Project aims and features
 
-- Provide information all Tokyo Metro lines;
-- Provide information on all Tokyo Metro stations;
-- Provide live status information for lines and stations, using information from the [Public Transportation Open Data Center 公共交通オープンデータセンター](https://www.odpt.org/);
-- Use i18n localisations to offer multilingual support, with English and Japanese initially supported.
+- [X] Provide information all Tokyo Metro lines;
+- [X] Provide information on all Tokyo Metro stations;
+- [X] Provide live status information for lines and stations, using information from the [Public Transportation Open Data Center 公共交通オープンデータセンター](https://www.odpt.org/);
+- [X] Use i18n localisations to offer multilingual support - currently supported in English, Japanese, Chinese (Simplified) and Korean.
 
 # By [Dean Spooner](https://github.com/DeanSpooner)
 

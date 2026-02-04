@@ -12,14 +12,14 @@ const Hero = ({ isBackwards }: { isBackwards?: boolean }) => {
           className="py-2 text-black !font-light !text-4xl md:!text-6xl lg:!text-7xl whitespace-nowrap px-0"
           font="zenKaku"
         >
-          TOKYOMETRO東京メトロTOKYOMETRO東京メトロTOKYOMETRO東京メトロTOKYOMETRO東京メトロ
+          TOKYOMETRO東京メトロ도쿄메트로东京地铁TOKYOMETRO東京メトロ도쿄메트로东京地铁TOKYOMETRO東京メトロ도쿄메트로东京地铁TOKYOMETRO東京メトロ도쿄메트로东京地铁
         </Typography>
         <Typography
           role="h1"
           className="py-2 text-black !font-light !text-4xl md:!text-6xl lg:!text-7xl whitespace-nowrap px-0"
           font="zenKaku"
         >
-          TOKYOMETRO東京メトロTOKYOMETRO東京メトロTOKYOMETRO東京メトロTOKYOMETRO東京メトロ
+          TOKYOMETRO東京メトロ도쿄메트로东京地铁TOKYOMETRO東京メトロ도쿄메트로东京地铁TOKYOMETRO東京メトロ도쿄메트로东京地铁TOKYOMETRO東京メトロ도쿄메트로东京地铁
         </Typography>
       </div>
     </div>

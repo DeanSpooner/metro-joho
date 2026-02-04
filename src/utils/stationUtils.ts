@@ -1,5 +1,6 @@
+import { Locale } from "@/i18n/config";
 import { odptClient } from "./odptClient";
-import { getLastSegment } from "./utilities";
+import { getLastSegment, getLocalizedTitle } from "./utilities";
 
 export interface StationData {
   id: string;
@@ -11,12 +12,12 @@ export interface StationData {
   }[];
 }
 
-export const getAllStations = async (): Promise<{ name: string; id: string }[]> => {
+export const getAllStations = async (locale: Locale): Promise<{ name: string; id: string }[]> => {
   const stations = await odptClient.getStations();
   const uniqueStations = new Map<string, string>();
 
   stations.forEach((station) => {
-    const name = station["odpt:stationTitle"].en;
+    const name = getLocalizedTitle(station["odpt:stationTitle"], locale);
     const id = getLastSegment(station["owl:sameAs"]);
     if (name && id) {
       uniqueStations.set(id, name);
@@ -25,11 +26,12 @@ export const getAllStations = async (): Promise<{ name: string; id: string }[]> 
 
   return Array.from(uniqueStations.entries())
     .map(([id, name]) => ({ id, name }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => a.name.localeCompare(b.name, locale));
 };
 
 export const getStationData = async (
-  stationId: string
+  stationId: string,
+  locale: Locale
 ): Promise<StationData | null> => {
   const allStations = await odptClient.getStations();
   const stationMatches = allStations.filter(
@@ -39,7 +41,7 @@ export const getStationData = async (
   if (stationMatches.length === 0) return null;
 
   const firstStation = stationMatches[0];
-  const name = firstStation["odpt:stationTitle"].en;
+  const name = getLocalizedTitle(firstStation["odpt:stationTitle"], locale);
 
   const lines = await Promise.all(
     stationMatches.map(async (s) => {
@@ -47,7 +49,7 @@ export const getStationData = async (
       const railway = railwayResponse[0];
       return {
         id: getLastSegment(railway["owl:sameAs"]),
-        name: railway["odpt:railwayTitle"].en,
+        name: getLocalizedTitle(railway["odpt:railwayTitle"], locale),
         color: railway["odpt:color"],
       };
     })

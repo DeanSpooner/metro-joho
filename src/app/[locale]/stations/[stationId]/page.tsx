@@ -3,24 +3,27 @@ import { getStationData, getTimetableForLine } from "@/utils/stationUtils";
 import Typography from "@/components/Typography";
 import Timetable from "@/components/Timetable";
 import PageWithHeader from "@/components/PageWithHeader";
+import { getDictionary, Locale } from "@/i18n/config";
 
 interface Props {
   params: Promise<{
+    locale: Locale;
     stationId: string;
   }>;
 }
 
 export default async function StationPage({ params }: Props) {
-  const { stationId } = await params;
-  const station = await getStationData(stationId);
+  const { locale, stationId } = await params;
+  const dict = await getDictionary(locale);
+  const station = await getStationData(stationId, locale);
 
   if (!station) {
     return (
-      <PageWithHeader>
+      <PageWithHeader locale={locale} dict={dict}>
         <main>
-          <Typography role="h1">Station not found</Typography>
+          <Typography role="h1">{dict.stations.notFound}</Typography>
           <Typography>
-            The station &quot;{stationId}&quot; could not be found in our database.
+            {dict.stations.notFoundDesc.replace("{id}", stationId)}
           </Typography>
         </main>
       </PageWithHeader>
@@ -28,10 +31,10 @@ export default async function StationPage({ params }: Props) {
   }
 
   return (
-    <PageWithHeader>
+    <PageWithHeader locale={locale} dict={dict}>
       <main>
         <Typography role="h1">{station.name}</Typography>
-        <Typography role="h2">Lines:</Typography>
+        <Typography role="h2">{dict.stations.linesAtStation}:</Typography>
         <ul>
           {station.lines.map((line) => (
             <li key={line.id} className="capitalize">
@@ -40,19 +43,19 @@ export default async function StationPage({ params }: Props) {
           ))}
         </ul>
 
-        <Typography role="h2">Timetable:</Typography>
+        <Typography role="h2">{dict.timetable.title}:</Typography>
         {await Promise.all(
           station.lines.map(async (line) => {
             const times = await getTimetableForLine(line.id, station.id);
             return (
               <div key={line.id} className="mb-6">
                 <Typography role="h3" className="capitalize">
-                  {line.name} line
+                  {line.name} {dict.lines.line}
                 </Typography>
                 {times.length > 0 ? (
-                  <Timetable times={times} />
+                  <Timetable times={times} clockLabel={dict.common.japanTime} />
                 ) : (
-                  <Typography>No timetable data available.</Typography>
+                  <Typography>{dict.timetable.noData}</Typography>
                 )}
               </div>
             );

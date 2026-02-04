@@ -5,9 +5,10 @@ import TimetableTime from "./TimetableTime";
 
 interface TimetableProps {
   times: string[];
+  clockLabel: string;
 }
 
-const Timetable = ({ times }: TimetableProps) => {
+const Timetable = ({ times, clockLabel }: TimetableProps) => {
   let currentTimetableBox = 1;
 
   const getTimetableTimeBox = (timetableTime: string) => {
@@ -72,7 +73,7 @@ const Timetable = ({ times }: TimetableProps) => {
 
   return (
     <Grid className="px-[0] py-[16px]">
-      <Clock />
+      <Clock label={clockLabel} />
       {times.map((time) => getTimetableTimeBox(time))}
     </Grid>
   );

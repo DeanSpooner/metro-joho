@@ -1,0 +1,42 @@
+{
+  "header": {
+    "viewLines": "查看所有线路",
+    "viewStations": "查看所有车站",
+    "home": "首页",
+    "welcome": "欢迎来到东京地铁信息门户！",
+    "logoAlt": "东京地铁标志"
+  },
+  "home": {
+    "odptTitle": "ODPT",
+    "odptDesc": "详细了解日本公共交通开放数据",
+    "tmTitle": "东京地铁",
+    "tmDesc": "访问东京地铁官方网站获取更多信息"
+  },
+  "common": {
+    "japanTime": "日本当前时间是 {time}"
+  },
+  "errors": {
+    "lineNotFound": "未找到线路",
+    "stationNotFound": "未找到车站"
+  },
+  "lines": {
+    "title": "东京地铁线路",
+    "viewFullDetails": "查看路线详情",
+    "stations": "车站",
+    "line": "线"
+  },
+  "stations": {
+    "title": "东京地铁车站",
+    "linesAtStation": "本站所属线路",
+    "notFound": "找不到车站",
+    "notFoundDesc": "在我们的数据库中找不到车站 \"{id}\"。"
+  },
+  "timetable": {
+    "title": "时刻表",
+    "departures": "班次",
+    "noData": "暂无时刻表数据。",
+    "otherLines": "其他线路",
+    "none": "无",
+    "viewTimetable": "查看时刻表"
+  }
+}

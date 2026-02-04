@@ -2,16 +2,18 @@ import PageWithHeader from "@/components/PageWithHeader";
 import Timetable from "@/components/Timetable";
 import Typography from "@/components/Typography";
 import { odptClient } from "@/utils/odptClient";
-import { getLastSegment } from "@/utils/utilities";
+import { getLastSegment, getLocalizedTitle } from "@/utils/utilities";
 import { getTimetableForLine } from "@/utils/stationUtils";
 import Link from "next/link";
+import { getDictionary, Locale } from "@/i18n/config";
 
 export default async function LineStationPage({
   params,
 }: {
-  params: Promise<{ lineId: string; stationId: string }>;
+  params: Promise<{ locale: Locale; lineId: string; stationId: string }>;
 }) {
-  const { lineId, stationId } = await params;
+  const { locale, lineId, stationId } = await params;
+  const dict = await getDictionary(locale);
   const lineResponse = await odptClient.getRailway(
     `odpt.Railway:TokyoMetro.${lineId}`
   );
@@ -23,15 +25,14 @@ export default async function LineStationPage({
   const station = stationResponse[0];
 
   if (!line) {
-    return <div>Line not found</div>;
+    return <div>{dict.errors.lineNotFound}</div>;
   }
   if (!station) {
-    return <div>Station not found</div>;
+    return <div>{dict.errors.stationNotFound}</div>;
   }
 
   const timetable = await getTimetableForLine(lineId, stationId);
 
-  // Fetch other stations at this location to show "Other lines at this station"
   const allStations = await odptClient.getStations();
   const sameStationOtherLines = allStations.filter((otherStation) => {
     const otherStationShortId = getLastSegment(otherStation["owl:sameAs"]);
@@ -44,27 +45,27 @@ export default async function LineStationPage({
   });
 
   return (
-    <PageWithHeader>
+    <PageWithHeader locale={locale} dict={dict}>
       <main>
         <Typography role="h1">
-          {station["odpt:stationTitle"].en} -{" "}
-          <Link href={`/lines/${getLastSegment(line["owl:sameAs"])}`}>
+          {getLocalizedTitle(station["odpt:stationTitle"], locale)} -{" "}
+          <Link href={`/${locale}/lines/${getLastSegment(line["owl:sameAs"])}`}>
             <strong style={{ color: line["odpt:color"] }}>
-              {line["odpt:railwayTitle"].en}
+              {getLocalizedTitle(line["odpt:railwayTitle"], locale)}
             </strong>
           </Link>
         </Typography>
         <Typography role="h2">
-          Timetable for {line["odpt:railwayTitle"].en}:
+          {dict.timetable.title} {dict.lines.line} {getLocalizedTitle(line["odpt:railwayTitle"], locale)}:
         </Typography>
         <ul>
           {timetable.length > 0 ? (
-            <Timetable times={timetable} />
+            <Timetable times={timetable} clockLabel={dict.common.japanTime} />
           ) : (
-            <li>No timetable available</li>
+            <li>{dict.timetable.noData}</li>
           )}
         </ul>
-        <Typography role="h2">Other lines at this station:</Typography>
+        <Typography role="h2">{dict.timetable.otherLines}:</Typography>
         <ul>
           {sameStationOtherLines.length > 0 ? (
             await Promise.all(
@@ -82,9 +83,9 @@ export default async function LineStationPage({
 
                 return (
                   <li key={otherLine["@id"]}>
-                    <Link href={`/lines/${lineShortId}/${stationShortId}`}>
+                    <Link href={`/${locale}/lines/${lineShortId}/${stationShortId}`}>
                       <strong style={{ color: otherLine["odpt:color"] }}>
-                        {otherLine["odpt:railwayTitle"].en}
+                        {getLocalizedTitle(otherLine["odpt:railwayTitle"], locale)}
                       </strong>
                     </Link>
                   </li>
@@ -92,7 +93,7 @@ export default async function LineStationPage({
               })
             )
           ) : (
-            <li>None</li>
+            <li>{dict.timetable.none}</li>
           )}
         </ul>
       </main>

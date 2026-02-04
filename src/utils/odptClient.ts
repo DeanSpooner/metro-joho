@@ -4,6 +4,9 @@ const ACCESS_TOKEN = process.env.ODPT_ACCESS_TOKEN || "[YOUR_ACCESS_TOKEN]";
 export interface ODPTTitle {
   ja: string;
   en: string;
+  "zh-Hans"?: string;
+  "zh-Hant"?: string;
+  ko?: string;
 }
 
 export interface ODPTRailway {
@@ -63,7 +66,7 @@ export async function fetchODPT<T>(
 
   try {
     const response = await fetch(url, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {

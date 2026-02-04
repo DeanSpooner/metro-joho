@@ -5,28 +5,30 @@ import Typography from "@/components/Typography";
 import Page from "@/components/Page";
 import Grid from "@/components/Grid";
 import Box from "@/components/Box";
-import { getLastSegment } from "@/utils/utilities";
+import { getLastSegment, getLocalizedTitle } from "@/utils/utilities";
 import Header from "@/components/Header";
+import { getDictionary, Locale } from "@/i18n/config";
 
-export default async function LinePage({ params }: { params: Promise<{ lineId: string }> }) {
-  const { lineId } = await params;
+export default async function LinePage({ params }: { params: Promise<{ locale: Locale; lineId: string }> }) {
+  const { locale, lineId } = await params;
+  const dict = await getDictionary(locale);
   const lineResponse = await odptClient.getRailway(
     `odpt.Railway:TokyoMetro.${lineId}`
   );
   const line = lineResponse[0];
 
   if (!line) {
-    return <div>Line not found</div>;
+    return <div>{dict.errors.lineNotFound}</div>;
   }
 
   return (
     <>
       <Grid>
         <Box>
-          <Header />
+          <Header locale={locale} dict={dict} />
         </Box>
         <Box>
-          <Typography role="h1">{line["odpt:railwayTitle"].en}</Typography>
+          <Typography role="h1">{getLocalizedTitle(line["odpt:railwayTitle"], locale)}</Typography>
         </Box>
       </Grid>
       <HorizontalEmblem
@@ -35,16 +37,16 @@ export default async function LinePage({ params }: { params: Promise<{ lineId: s
       />
       <Page>
         <main>
-          <Typography role="h2">Stations on this line:</Typography>
+          <Typography role="h2">{dict.lines.stations}:</Typography>
           <ul>
             {line["odpt:stationOrder"].map((station) => (
               <li key={station["odpt:station"]}>
                 <Link
-                  href={`/lines/${getLastSegment(
+                  href={`/${locale}/lines/${getLastSegment(
                     line["owl:sameAs"]
                   )}/${getLastSegment(station["odpt:station"])}`}
                 >
-                  {station["odpt:stationTitle"]?.en || getLastSegment(station["odpt:station"])}
+                  {getLocalizedTitle(station["odpt:stationTitle"], locale) || getLastSegment(station["odpt:station"])}
                 </Link>
               </li>
             ))}

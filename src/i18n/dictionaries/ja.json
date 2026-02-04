@@ -1,0 +1,42 @@
+{
+  "header": {
+    "viewLines": "すべての路線を表示",
+    "viewStations": "すべての駅を表示",
+    "home": "ホーム",
+    "welcome": "東京メトロ情報へようこそ！",
+    "logoAlt": "東京メトロロゴ"
+  },
+  "home": {
+    "odptTitle": "ODPT",
+    "odptDesc": "公共交通オープンデータ協議会について詳しく知る",
+    "tmTitle": "東京メトロ",
+    "tmDesc": "東京メトロの公式サイトで詳細情報を確認する"
+  },
+  "common": {
+    "japanTime": "日本の現在時刻は{time}です。"
+  },
+  "errors": {
+    "lineNotFound": "路線が見つかりません",
+    "stationNotFound": "駅が見つかりません"
+  },
+  "lines": {
+    "title": "東京メトロ路線",
+    "viewFullDetails": "詳細を表示",
+    "stations": "停車駅",
+    "line": "線"
+  },
+  "stations": {
+    "title": "東京メトロ駅",
+    "linesAtStation": "乗り入れ路線",
+    "notFound": "駅が見つかりません",
+    "notFoundDesc": "駅 \"{id}\" はデータベースに見つかりませんでした。"
+  },
+  "timetable": {
+    "title": "時刻表",
+    "departures": "本数",
+    "noData": "現在、時刻表データはありません。",
+    "otherLines": "他路線",
+    "none": "なし",
+    "viewTimetable": "時刻表を表示"
+  }
+}
