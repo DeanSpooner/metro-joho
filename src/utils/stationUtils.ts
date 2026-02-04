@@ -35,7 +35,6 @@ export const getAllStations = async (locale: Locale): Promise<StationData[]> => 
     const railwayId = station["odpt:railway"];
     const railwayInfo = railwayMap.get(railwayId);
     
-    // Only process Tokyo Metro stations (this check might be redundant given odptClient methods but safe)
     if (name && id && railwayInfo) {
       if (!uniqueStations.has(id)) {
         uniqueStations.set(id, {
@@ -46,13 +45,10 @@ export const getAllStations = async (locale: Locale): Promise<StationData[]> => 
       }
 
       const entry = uniqueStations.get(id)!;
-      // Avoid duplicates if multiple entries exist for same line/station
       if (!entry.lines.some(l => l.id === getLastSegment(railwayId))) {
         entry.lines.push({
           id: getLastSegment(railwayId),
-          name: getLocalizedTitle(station["odpt:stationTitle"], locale), // Using station title here effectively gives line context sometimes, but railway title might be better. 
-          // Actually, let's just use the line ID/Title from railway map if needed, 
-          // but for the card we mostly need color and station CODE.
+          name: getLocalizedTitle(station["odpt:stationTitle"], locale),
           color: railwayInfo.color,
           code: station["odpt:stationCode"],
         });
@@ -115,12 +111,9 @@ export const getTimetablesByDirection = async (
 
   if (timetables.length === 0) return [];
 
-  // Group by direction
   const directionMap = new Map<string, Set<string>>();
   
   timetables.forEach((tt) => {
-    // direction is line "odpt.RailDirection:TokyoMetro.Ikebukuro"
-    // The property name is odpt:railDirection, NOT odpt:direction
     const direction = tt["odpt:railDirection"] || "Unknown";
     
     if (!directionMap.has(direction)) {
@@ -133,32 +126,14 @@ export const getTimetablesByDirection = async (
     });
   });
 
-  // Convert to array and fetch friendly names
   const results = await Promise.all(
     Array.from(directionMap.entries()).map(async ([directionUrn, timeSet]) => {
-      // directionUrn example: odpt.RailDirection:TokyoMetro.Marunouchi.Ogikubo
-      // We can try to guess the station ID from it, or just use the last segment.
-      // However, ODPT RailDirection is often just the station URN basically.
-      // Let's try to fetch the station info for the direction to get a localized name.
-      
-      // The direction URN usually ends with the station ID (e.g. .Ogikubo)
-      // BUT, it's a RailDirection, not a Station. 
-      // Example: odpt.RailDirection:TokyoMetro.Marunouchi.Ogikubo
-      // The station URN would be odpt.Station:TokyoMetro.Marunouchi.Ogikubo
-      
       const directionStationId = getLastSegment(directionUrn);
-      
-      // Try to find a station with this ID on the same line to get the official title
-      // We can reuse getStationData logic or just fetch all stations on line.
-      // A faster way finding the station in our already stored station list?
-      // For now let's just use the station ID as a fallback, and try to fetch station data.
       
       let directionName = directionStationId; 
 
-      // Attempt to fetch station info to get localized name
-      // We construct the likely Station URN
       const likelyStationUrn = `odpt.Station:TokyoMetro.${lineId}.${directionStationId}`;
-      const stationRes = await odptClient.getStation(likelyStationUrn); // Use client to fetch specific
+      const stationRes = await odptClient.getStation(likelyStationUrn);
       
       if (stationRes.length > 0) {
         directionName = getLocalizedTitle(stationRes[0]["odpt:stationTitle"], locale) || directionName;
@@ -175,7 +150,6 @@ export const getTimetablesByDirection = async (
   return results.sort((a, b) => a.directionName.localeCompare(b.directionName, locale));
 };
 
-// Deprecated: Use getTimetablesByDirection instead for new UI
 export const getTimetableForLine = async (
   lineId: string,
   stationId: string

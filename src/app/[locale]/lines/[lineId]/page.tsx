@@ -24,7 +24,6 @@ export default async function LinePage({ params }: { params: Promise<{ locale: L
     return <div>{dict.errors.lineNotFound}</div>;
   }
 
-  // Filter stations for this railway and create a lookup map for codes
   const stationCodeMap = stationData
     .filter(s => s["odpt:railway"] === railwayId)
     .reduce((acc, s) => {

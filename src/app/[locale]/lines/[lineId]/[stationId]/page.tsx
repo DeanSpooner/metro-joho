@@ -1,11 +1,12 @@
 import PageWithHeader from "@/components/PageWithHeader";
-import Timetable from "@/components/Timetable";
 import Typography from "@/components/Typography";
+import CollapsibleTimetable from "@/components/CollapsibleTimetable";
 import { odptClient } from "@/utils/odptClient";
 import { getLastSegment, getLocalizedTitle } from "@/utils/utilities";
-import { getTimetableForLine } from "@/utils/stationUtils";
+import { getTimetablesByDirection } from "@/utils/stationUtils";
 import Link from "next/link";
 import { getDictionary, Locale } from "@/i18n/config";
+import StationEmblem from "@/components/StationEmblem";
 
 export default async function LineStationPage({
   params,
@@ -31,7 +32,7 @@ export default async function LineStationPage({
     return <div>{dict.errors.stationNotFound}</div>;
   }
 
-  const timetable = await getTimetableForLine(lineId, stationId);
+  const directionTimetables = await getTimetablesByDirection(lineId, stationId, locale);
 
   const allStations = await odptClient.getStations();
   const sameStationOtherLines = allStations.filter((otherStation) => {
@@ -46,56 +47,96 @@ export default async function LineStationPage({
 
   return (
     <PageWithHeader locale={locale} dict={dict}>
-      <main>
-        <Typography role="h1">
-          {getLocalizedTitle(station["odpt:stationTitle"], locale)} -{" "}
-          <Link href={`/${locale}/lines/${getLastSegment(line["owl:sameAs"])}`}>
-            <strong style={{ color: line["odpt:color"] }}>
+      <main className="max-w-5xl mx-auto px-4 py-8">
+        <div className="mb-12 flex flex-col md:flex-row items-center justify-center gap-6 text-center md:text-left">
+          <StationEmblem
+            color={line["odpt:color"]}
+            code={station["odpt:stationCode"]}
+            size="md"
+            className="scale-125"
+          />
+          <div>
+            <Typography role="h1" font="zenKaku" className="text-4xl md:text-5xl font-bold mb-2">
+              {getLocalizedTitle(station["odpt:stationTitle"], locale)}
+            </Typography>
+            <Link
+              href={`/${locale}/lines/${getLastSegment(line["owl:sameAs"])}`}
+              className="text-xl md:text-2xl font-bold hover:opacity-80 transition-opacity flex items-center justify-center md:justify-start gap-2"
+              style={{ color: line["odpt:color"] }}
+            >
               {getLocalizedTitle(line["odpt:railwayTitle"], locale)}
-            </strong>
-          </Link>
-        </Typography>
-        <Typography role="h2">
-          {dict.timetable.title}:
-        </Typography>
-        <ul>
-          {timetable.length > 0 ? (
-            <Timetable times={timetable} clockLabel={dict.common.japanTime} />
+            </Link>
+          </div>
+        </div>
+
+        <div className="space-y-6 mb-16">
+          <div className="flex items-end justify-between border-b border-white/10 pb-4 mb-6">
+            <Typography role="h2" font="zenKaku" className="text-3xl font-bold">
+              {dict.timetable.title}
+            </Typography>
+          </div>
+
+          {directionTimetables.length > 0 ? (
+            directionTimetables.map((dt) => (
+              <CollapsibleTimetable
+                key={dt.directionId}
+                id={`dir-${dt.directionId}`}
+                directionId={dt.directionId}
+                directionName={dt.directionName}
+                times={dt.times}
+                boundForText={dict.timetable.boundFor}
+                locale={locale}
+              />
+            ))
           ) : (
-            <li>{dict.timetable.noData}</li>
+            <div className="text-center py-12 text-white/30 italic bg-white/5 rounded-xl border border-white/10">
+              {dict.timetable.noData}
+            </div>
           )}
-        </ul>
-        <Typography role="h2">{dict.timetable.otherLines}:</Typography>
-        <ul>
-          {sameStationOtherLines.length > 0 ? (
-            await Promise.all(
-              sameStationOtherLines.map(async (otherStation) => {
-                const otherLineResponse = await odptClient.getRailway(
-                  otherStation["odpt:railway"]
-                );
-                const otherLine = otherLineResponse[0];
-                if (!otherLine) return null;
+        </div>
 
-                const lineShortId = getLastSegment(otherLine["owl:sameAs"]);
-                const stationShortId = getLastSegment(
-                  otherStation["owl:sameAs"]
-                );
+        {sameStationOtherLines.length > 0 && (
+          <div>
+            <Typography role="h2" font="zenKaku" className="text-2xl font-bold mb-6 border-b border-white/10 pb-4">
+              {dict.timetable.otherLines}
+            </Typography>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {await Promise.all(
+                sameStationOtherLines.map(async (otherStation) => {
+                  const otherLineResponse = await odptClient.getRailway(
+                    otherStation["odpt:railway"]
+                  );
+                  const otherLine = otherLineResponse[0];
+                  if (!otherLine) return null;
 
-                return (
-                  <li key={otherLine["@id"]}>
-                    <Link href={`/${locale}/lines/${lineShortId}/${stationShortId}`}>
-                      <strong style={{ color: otherLine["odpt:color"] }}>
-                        {getLocalizedTitle(otherLine["odpt:railwayTitle"], locale)}
-                      </strong>
+                  const lineShortId = getLastSegment(otherLine["owl:sameAs"]);
+                  const stationShortId = getLastSegment(
+                    otherStation["owl:sameAs"]
+                  );
+
+                  return (
+                    <Link
+                      key={otherLine["@id"]}
+                      href={`/${locale}/lines/${lineShortId}/${stationShortId}`}
+                      className="group block bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/10 hover:border-white/20 hover:shadow-lg transition-all no-underline"
+                    >
+                      <div className="flex items-center gap-4">
+                        <StationEmblem
+                          color={otherLine["odpt:color"]}
+                          code={otherLine["odpt:lineCode"]}
+                          size="sm"
+                        />
+                        <Typography font="zenKaku" className="font-bold text-lg group-hover:text-white transition-colors">
+                          {getLocalizedTitle(otherLine["odpt:railwayTitle"], locale)}
+                        </Typography>
+                      </div>
                     </Link>
-                  </li>
-                );
-              })
-            )
-          ) : (
-            <li>{dict.timetable.none}</li>
-          )}
-        </ul>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
       </main>
     </PageWithHeader>
   );

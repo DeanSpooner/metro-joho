@@ -12,7 +12,6 @@ interface StationEmblemProps {
 const StationEmblem = ({ color, code, className, size = "md" }: StationEmblemProps) => {
     const dimensions = size === "sm" ? "w-10 h-10" : "w-12 h-12";
 
-    // Split code into two parts (e.g., "G" and "01")
     const match = code.match(/^([A-Z]+)(\d+)$/);
     const letterPart = match ? match[1] : code;
     const numberPart = match ? match[2] : "";

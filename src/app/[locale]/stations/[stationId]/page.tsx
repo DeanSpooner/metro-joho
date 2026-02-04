@@ -37,14 +37,12 @@ export default async function StationPage({ params }: Props) {
   return (
     <PageWithHeader locale={locale} dict={dict}>
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
         <div className="mb-12 text-center">
           <Typography role="h1" font="zenKaku" className="text-5xl md:text-7xl font-bold mb-4">
             {station.name}
           </Typography>
         </div>
 
-        {/* Serving Lines Grid */}
         <div className="mb-16">
           <Typography role="h2" font="zenKaku" className="text-2xl mb-6 border-b border-white/10 pb-2">
             {dict.stations.linesAtStation}
@@ -81,10 +79,9 @@ export default async function StationPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Timetables */}
         <div>
           <Typography role="h2" font="zenKaku" className="text-2xl mb-8 border-b border-white/10 pb-2">
-            {dict.timetable.title} <span className="text-base font-normal text-white/50 ml-2">({dict.timetable.departures})</span>
+            {dict.timetable.title}
           </Typography>
 
           <div className="space-y-8">
@@ -108,7 +105,7 @@ export default async function StationPage({ params }: Props) {
                     {directionTimetables.length > 0 ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {directionTimetables.map((dt) => (
-                          <div key={dt.directionId} className="flex flex-col">
+                          <div key={dt.directionId} className="flex flex-col border-b border-white/10 pb-8 last:border-0 last:pb-0 md:border-0 md:pb-0">
                             <Typography className="text-sm text-white/50 mb-2 uppercase tracking-wider font-bold">
                               {dict.timetable.boundFor || "Bound for"} {dt.directionName}
                             </Typography>

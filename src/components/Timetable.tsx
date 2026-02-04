@@ -1,14 +1,22 @@
+"use client";
+
 import React from "react";
-import Grid from "./Grid";
-import Clock from "./Clock";
 import TimetableTime from "./TimetableTime";
 
 interface TimetableProps {
   times: string[];
-  clockLabel: string;
 }
 
-const Timetable = ({ times, clockLabel }: TimetableProps) => {
+const Timetable = ({ times }: TimetableProps) => {
+  const [, setTick] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   let currentTimetableBox = 1;
 
   const getTimetableTimeBox = (timetableTime: string) => {
@@ -17,6 +25,7 @@ const Timetable = ({ times, clockLabel }: TimetableProps) => {
     const jstNow = new Date(
       now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" })
     );
+    jstNow.setSeconds(0, 0);
 
     const timetableDate = new Date(jstNow);
     timetableDate.setHours(hour, minute, 0, 0);
@@ -26,7 +35,7 @@ const Timetable = ({ times, clockLabel }: TimetableProps) => {
         <TimetableTime
           key={timetableTime}
           time={timetableTime}
-          className="bg-red-800"
+          className="bg-white/5 opacity-30 cursor-not-allowed border border-transparent"
         />
       );
     }
@@ -37,25 +46,16 @@ const Timetable = ({ times, clockLabel }: TimetableProps) => {
         <TimetableTime
           key={timetableTime}
           time={timetableTime}
-          className="bg-teal-500 animate-[bgpulse_2s_ease-in-out_infinite]"
+          className="bg-white text-[#02022a] font-bold border border-white shadow-lg animate-pulse"
           typographyRole="strong"
         />
       );
-    } else if (priorityTimes === 2) {
+    } else if (priorityTimes <= 3) {
       return (
         <TimetableTime
           key={timetableTime}
           time={timetableTime}
-          className="bg-teal-700"
-          typographyRole="strong"
-        />
-      );
-    } else if (priorityTimes === 3) {
-      return (
-        <TimetableTime
-          key={timetableTime}
-          time={timetableTime}
-          className="bg-teal-800"
+          className="bg-white/20 border border-white/30 text-white"
           typographyRole="strong"
         />
       );
@@ -64,7 +64,7 @@ const Timetable = ({ times, clockLabel }: TimetableProps) => {
         <TimetableTime
           key={timetableTime}
           time={timetableTime}
-          className="bg-teal-900"
+          className="bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20 transition-colors"
           typographyRole="strong"
         />
       );
@@ -72,10 +72,9 @@ const Timetable = ({ times, clockLabel }: TimetableProps) => {
   };
 
   return (
-    <Grid className="px-[0] py-[16px]">
-      <Clock label={clockLabel} />
+    <div className="mx-auto max-w-[1200px] grid grid-cols-5 sm:grid-cols-6 md:grid-cols-10 lg:grid-cols-12 gap-2 px-2 py-4">
       {times.map((time) => getTimetableTimeBox(time))}
-    </Grid>
+    </div>
   );
 };
 

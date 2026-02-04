@@ -20,10 +20,8 @@ const StationList = ({ initialStations, locale, placeholder, noResults }: Statio
 
         const lowerQuery = searchQuery.toLowerCase();
         return initialStations.filter((station) => {
-            // Match name
             if (station.name.toLowerCase().includes(lowerQuery)) return true;
 
-            // Match station code (e.g. "G01")
             return station.lines.some(line => line.code.toLowerCase().includes(lowerQuery));
         });
     }, [initialStations, searchQuery]);
@@ -38,7 +36,6 @@ const StationList = ({ initialStations, locale, placeholder, noResults }: Statio
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full bg-white/10 border border-white/20 rounded-full py-3 px-6 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all backdrop-blur-sm"
                 />
-                {/* Simple search icon SVG could go here */}
             </div>
 
             {filteredStations.length > 0 ? (

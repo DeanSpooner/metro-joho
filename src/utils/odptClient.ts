@@ -47,7 +47,7 @@ export interface ODPTStationTimetable {
   "owl:sameAs": string;
   "odpt:railway": string;
   "odpt:station": string;
-  "odpt:railDirection": string; // FIXED: API returns railDirection, not direction
+  "odpt:railDirection": string;
   "odpt:calendar": string;
   "odpt:operator": string;
   "odpt:stationTimetableObject": ODPTStationTimetableObject[];

@@ -20,7 +20,7 @@ const TimetableTime = ({
       colsLg={1}
       className={`text-center content-center h-[32px] ${className}`}
     >
-      <Typography role={typographyRole}>{time}</Typography>
+      <Typography role={typographyRole} font="zenKaku">{time}</Typography>
     </Box>
   );
 };
