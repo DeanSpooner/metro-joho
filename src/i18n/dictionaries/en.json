@@ -38,6 +38,7 @@
     "noData": "No timetable data available.",
     "otherLines": "Other Lines",
     "none": "None",
-    "viewTimetable": "View Timetable"
+    "viewTimetable": "View Timetable",
+    "boundFor": "Bound for"
   }
 }

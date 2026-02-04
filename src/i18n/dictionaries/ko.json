@@ -38,6 +38,7 @@
     "noData": "시간표 데이터가 없습니다.",
     "otherLines": "다른 노선",
     "none": "없음",
-    "viewTimetable": "시간표 보기"
+    "viewTimetable": "시간표 보기",
+    "boundFor": "행"
   }
 }

@@ -38,6 +38,7 @@
     "noData": "現在、時刻表データはありません。",
     "otherLines": "他路線",
     "none": "なし",
-    "viewTimetable": "時刻表を表示"
+    "viewTimetable": "時刻表を見る",
+    "boundFor": "方面"
   }
 }

@@ -38,6 +38,7 @@
     "noData": "暂无时刻表数据。",
     "otherLines": "其他线路",
     "none": "无",
-    "viewTimetable": "查看时刻表"
+    "viewTimetable": "查看时刻表",
+    "boundFor": "往"
   }
 }
