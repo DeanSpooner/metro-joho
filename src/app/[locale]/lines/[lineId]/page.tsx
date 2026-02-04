@@ -6,18 +6,31 @@ import Page from "@/components/Page";
 import { getLastSegment, getLocalizedTitle } from "@/utils/utilities";
 import Header from "@/components/Header";
 import { getDictionary, Locale } from "@/i18n/config";
+import StationEmblem from "@/components/StationEmblem";
 
 export default async function LinePage({ params }: { params: Promise<{ locale: Locale; lineId: string }> }) {
   const { locale, lineId } = await params;
   const dict = await getDictionary(locale);
-  const lineResponse = await odptClient.getRailway(
-    `odpt.Railway:TokyoMetro.${lineId}`
-  );
+
+  const railwayId = `odpt.Railway:TokyoMetro.${lineId}`;
+  const [lineResponse, stationData] = await Promise.all([
+    odptClient.getRailway(railwayId),
+    odptClient.getStations() // We could filter by railway if we enhanced odptClient, but this works for now
+  ]);
+
   const line = lineResponse[0];
 
   if (!line) {
     return <div>{dict.errors.lineNotFound}</div>;
   }
+
+  // Filter stations for this railway and create a lookup map for codes
+  const stationCodeMap = stationData
+    .filter(s => s["odpt:railway"] === railwayId)
+    .reduce((acc, s) => {
+      acc[s["owl:sameAs"]] = s["odpt:stationCode"];
+      return acc;
+    }, {} as Record<string, string>);
 
   const stations = line["odpt:stationOrder"];
 
@@ -37,34 +50,37 @@ export default async function LinePage({ params }: { params: Promise<{ locale: L
         />
 
         <Page>
-          <main className="mt-16">
-            <Typography role="h2" font="zenKaku" className="mb-12 text-2xl border-b border-white/10 pb-4">
+          <main>
+            <Typography role="h2" font="zenKaku" className="mb-4 text-2xl border-b border-white/10 pb-4">
               {dict.lines.stations}
             </Typography>
-
             <div className="relative">
               <div
-                className="absolute left-4 top-0 bottom-0 w-1 rounded-full opacity-20"
+                className="absolute left-[-2] top-5 bottom-5 w-1 rounded-full"
                 style={{ backgroundColor: line["odpt:color"] }}
               />
-
-              <ul className="space-y-8 relative">
+              <ul className="space-y-12 relative">
                 {stations.map((station) => {
                   const stationId = getLastSegment(station["odpt:station"]);
+                  const stationCode = stationCodeMap[station["odpt:station"]] || "";
 
                   return (
-                    <li key={station["odpt:station"]} className="relative flex items-center group">
-                      <div
-                        className="absolute left-4 -translate-x-1/2 w-4 h-4 rounded-full border-4 border-[#02022a] z-10 transition-transform duration-300 group-hover:scale-150"
-                        style={{ backgroundColor: line["odpt:color"] }}
-                      />
-
+                    <li key={station["odpt:station"]} className="relative flex items-center">
                       <Link
-                        href={`/${locale}/lines/${getLastSegment(line["owl:sameAs"])}/${stationId}`}
-                        className="ml-12 block py-2 px-4 rounded-lg hover:bg-white/5 transition-colors w-full border border-transparent hover:border-white/10 no-underline"
+                        href={`/${locale}/lines/${lineId}/${stationId}`}
+                        className="flex items-center w-full py-3 px-6 rounded-lg hover:bg-white/5 transition-all border border-transparent hover:border-white/10 no-underline group"
                       >
-                        <div className="flex items-baseline justify-between">
-                          <Typography font="zenKaku" className="text-xl text-white group-hover:text-white transition-colors font-bold">
+                        <StationEmblem
+                          color={line["odpt:color"]}
+                          code={stationCode}
+                          className="absolute left-0 -translate-x-1/2"
+                        />
+                        <div className="flex items-center justify-between w-full ml-4">
+                          <Typography
+                            font="zenKaku"
+                            className="text-white transition-all transform group-hover:scale-120 origin-left font-bold"
+                            style={{ fontSize: "1.25rem" }}
+                          >
                             {getLocalizedTitle(station["odpt:stationTitle"], locale) || stationId}
                           </Typography>
                         </div>

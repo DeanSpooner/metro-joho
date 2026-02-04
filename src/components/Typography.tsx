@@ -48,6 +48,7 @@ interface TypographyProps {
   className?: string;
   role?: TypographyRole;
   font?: "noto" | "zenKaku";
+  style?: React.CSSProperties;
 }
 
 const Typography = ({
@@ -55,6 +56,7 @@ const Typography = ({
   className,
   role = "p",
   font = "noto",
+  style,
 }: TypographyProps) => {
   const Component = role as React.ElementType;
 
@@ -64,6 +66,7 @@ const Typography = ({
         font === "zenKaku" ? zenKakuGothicNewJP.className : "",
         className
       )}
+      style={style}
     >
       {children}
     </Component>

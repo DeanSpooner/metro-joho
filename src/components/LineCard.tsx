@@ -36,7 +36,7 @@ const LineCard = ({ locale, line, title, stationsLabel, terminalStations }: Line
                     </div>
 
                     <div className="mt-auto">
-                        <Typography role="h3" font="zenKaku" className="text-white group-hover:text-white transition-colors">
+                        <Typography role="h3" font="zenKaku" className="text-2xl text-white group-hover:text-white transition-colors">
                             {title}
                         </Typography>
 

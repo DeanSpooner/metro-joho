@@ -13,7 +13,7 @@ export default async function LinesPage({ params }: { params: Promise<{ locale: 
   return (
     <PageWithHeader locale={locale} dict={dict}>
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <Typography role="h1" font="zenKaku" className="mb-12 text-center text-4xl md:text-5xl">
+        <Typography role="h1" font="zenKaku" className="mb-12 text-center text-5xl md:text-6xl">
           {dict.lines.title}
         </Typography>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

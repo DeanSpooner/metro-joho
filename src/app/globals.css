@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 :root {
   --background: #02022a;
   --white: #f0f0f0;
@@ -28,7 +26,7 @@ h2 {
 h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  line-height: 2rem;
+  line-height: 2.25rem;
 }
 
 h4 {
@@ -54,6 +52,8 @@ p {
   font-weight: 400;
   line-height: 1.75rem;
 }
+
+@import "tailwindcss";
 
 @keyframes bgpulse {
   0%,
