@@ -86,6 +86,8 @@ export default async function LineStationPage({
                 times={dt.times}
                 boundForText={dict.timetable.boundFor}
                 locale={locale}
+                stationCode={dt.stationCode}
+                lineColor={line["odpt:color"]}
               />
             ))
           ) : (

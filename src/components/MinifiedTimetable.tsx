@@ -41,15 +41,15 @@ const MinifiedTimetable = ({
             <div className={`flex flex-wrap gap-3 items-center ${showLink ? "mb-6" : ""}`}>
 
                 {missed && (
-                    <div className="relative group hidden sm:block">
-                        <Typography className="text-white/30 font-mono text-lg line-through decoration-white/20">
+                    <div className="relative group hidden sm:block w-[84px]">
+                        <Typography className="text-white/30 font-mono text-lg line-through decoration-white/20 text-center">
                             {missed}
                         </Typography>
                     </div>
                 )}
 
                 {upcoming.length > 0 && (
-                    <div className="bg-white text-[#02022a] px-3 py-1 rounded-md font-bold font-mono text-xl shadow-lg animate-pulse">
+                    <div className="bg-white text-[#02022a] px-3 py-1 rounded-md font-bold font-mono text-xl shadow-lg animate-pulse w-[84px] text-center">
                         {upcoming[0]}
                     </div>
                 )}
@@ -57,7 +57,7 @@ const MinifiedTimetable = ({
                 {upcoming.slice(1).map((time, index) => (
                     <div
                         key={time}
-                        className={`bg-white/10 px-3 py-1 rounded-md font-mono text-lg text-white/80 ${index >= 1 ? 'hidden sm:block' : ''}`}
+                        className={`bg-white/10 px-3 py-1 rounded-md font-mono text-lg text-white/80 w-[84px] text-center ${index >= 1 ? 'hidden sm:block' : ''}`}
                     >
                         {time}
                     </div>

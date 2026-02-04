@@ -15,6 +15,8 @@ interface CollapsibleTimetableProps {
     locale: Locale;
     className?: string;
     id?: string;
+    stationCode?: string;
+    lineColor?: string;
 }
 
 const CollapsibleTimetable = ({
@@ -24,6 +26,8 @@ const CollapsibleTimetable = ({
     locale,
     className,
     id,
+    stationCode,
+    lineColor,
 }: CollapsibleTimetableProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -45,13 +49,22 @@ const CollapsibleTimetable = ({
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors group"
             >
-                <div className="flex flex-col">
-                    <Typography className="text-sm text-white/50 uppercase tracking-wider font-bold mb-1">
-                        {boundForText}
-                    </Typography>
-                    <Typography role="h3" font="zenKaku" className="text-2xl font-bold group-hover:text-white transition-colors">
-                        {directionName}
-                    </Typography>
+                <div className="flex items-center gap-4">
+                    {stationCode && lineColor && (
+                        <StationEmblem
+                            color={lineColor}
+                            code={stationCode}
+                            size="sm"
+                        />
+                    )}
+                    <div className="flex flex-col">
+                        <Typography className="text-sm text-white/50 uppercase tracking-wider font-bold mb-1">
+                            {boundForText}
+                        </Typography>
+                        <Typography role="h3" font="zenKaku" className="text-2xl font-bold group-hover:text-white transition-colors">
+                            {directionName}
+                        </Typography>
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-4">

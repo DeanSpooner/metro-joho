@@ -19,7 +19,7 @@ const StationEmblem = ({ color, code, className, size = "md" }: StationEmblemPro
     return (
         <div
             className={twMerge(
-                "flex items-center justify-center rounded-full bg-white border-4 z-10 transition-transform duration-300 group-hover:scale-110",
+                "flex items-center justify-center rounded-full bg-white border-4 z-10 transition-transform duration-300 group-hover:scale-110 flex-shrink-0",
                 dimensions,
                 className
             )}

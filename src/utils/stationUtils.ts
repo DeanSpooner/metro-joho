@@ -98,6 +98,7 @@ export interface DirectionalTimetable {
   directionId: string;
   directionName: string;
   times: string[];
+  stationCode?: string;
 }
 
 export const getTimetablesByDirection = async (
@@ -135,14 +136,17 @@ export const getTimetablesByDirection = async (
       const likelyStationUrn = `odpt.Station:TokyoMetro.${lineId}.${directionStationId}`;
       const stationRes = await odptClient.getStation(likelyStationUrn);
       
+      let stationCode: string | undefined;
       if (stationRes.length > 0) {
         directionName = getLocalizedTitle(stationRes[0]["odpt:stationTitle"], locale) || directionName;
+        stationCode = stationRes[0]["odpt:stationCode"];
       }
 
       return {
         directionId: directionStationId,
         directionName,
         times: Array.from(timeSet).sort(),
+        stationCode,
       };
     })
   );
