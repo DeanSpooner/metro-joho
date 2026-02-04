@@ -15,7 +15,7 @@ export default async function LinePage({ params }: { params: Promise<{ locale: L
   const railwayId = `odpt.Railway:TokyoMetro.${lineId}`;
   const [lineResponse, stationData] = await Promise.all([
     odptClient.getRailway(railwayId),
-    odptClient.getStations() // We could filter by railway if we enhanced odptClient, but this works for now
+    odptClient.getStations()
   ]);
 
   const line = lineResponse[0];

@@ -28,6 +28,7 @@
   "stations": {
     "title": "東京メトロ駅",
     "linesAtStation": "乗り入れ路線",
+    "searchPlaceholder": "名前またはコードで検索...",
     "notFound": "駅が見つかりません",
     "notFoundDesc": "駅 \"{id}\" はデータベースに見つかりませんでした。"
   },

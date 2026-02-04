@@ -28,6 +28,7 @@
   "stations": {
     "title": "Tokyo Metro Stations",
     "linesAtStation": "Lines at this station",
+    "searchPlaceholder": "Search by name or code...",
     "notFound": "Station not found",
     "notFoundDesc": "The station \"{id}\" could not be found."
   },

@@ -9,23 +9,58 @@ export interface StationData {
     id: string;
     name: string;
     color: string;
+    code: string;
   }[];
 }
 
-export const getAllStations = async (locale: Locale): Promise<{ name: string; id: string }[]> => {
-  const stations = await odptClient.getStations();
-  const uniqueStations = new Map<string, string>();
+export const getAllStations = async (locale: Locale): Promise<StationData[]> => {
+  const [stations, railways] = await Promise.all([
+    odptClient.getStations(),
+    odptClient.getRailways(),
+  ]);
+
+  const railwayMap = new Map<string, { color: string; code: string }>();
+  railways.forEach((r) => {
+    railwayMap.set(r["owl:sameAs"], {
+      color: r["odpt:color"],
+      code: r["odpt:lineCode"],
+    });
+  });
+
+  const uniqueStations = new Map<string, StationData>();
 
   stations.forEach((station) => {
     const name = getLocalizedTitle(station["odpt:stationTitle"], locale);
     const id = getLastSegment(station["owl:sameAs"]);
-    if (name && id) {
-      uniqueStations.set(id, name);
+    const railwayId = station["odpt:railway"];
+    const railwayInfo = railwayMap.get(railwayId);
+    
+    // Only process Tokyo Metro stations (this check might be redundant given odptClient methods but safe)
+    if (name && id && railwayInfo) {
+      if (!uniqueStations.has(id)) {
+        uniqueStations.set(id, {
+          id,
+          name,
+          lines: [],
+        });
+      }
+
+      const entry = uniqueStations.get(id)!;
+      // Avoid duplicates if multiple entries exist for same line/station
+      if (!entry.lines.some(l => l.id === getLastSegment(railwayId))) {
+        entry.lines.push({
+          id: getLastSegment(railwayId),
+          name: getLocalizedTitle(station["odpt:stationTitle"], locale), // Using station title here effectively gives line context sometimes, but railway title might be better. 
+          // Actually, let's just use the line ID/Title from railway map if needed, 
+          // but for the card we mostly need color and station CODE.
+          color: railwayInfo.color,
+          code: station["odpt:stationCode"],
+        });
+      }
     }
   });
 
-  return Array.from(uniqueStations.entries())
-    .map(([id, name]) => ({ id, name }))
+  return Array.from(uniqueStations.values())
     .sort((a, b) => a.name.localeCompare(b.name, locale));
 };
 
@@ -51,6 +86,7 @@ export const getStationData = async (
         id: getLastSegment(railway["owl:sameAs"]),
         name: getLocalizedTitle(railway["odpt:railwayTitle"], locale),
         color: railway["odpt:color"],
+        code: s["odpt:stationCode"],
       };
     })
   );

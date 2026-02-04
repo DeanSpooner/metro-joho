@@ -28,6 +28,7 @@
   "stations": {
     "title": "东京地铁车站",
     "linesAtStation": "本站所属线路",
+    "searchPlaceholder": "按名称或代码搜索...",
     "notFound": "找不到车站",
     "notFoundDesc": "在我们的数据库中找不到车站 \"{id}\"。"
   },
