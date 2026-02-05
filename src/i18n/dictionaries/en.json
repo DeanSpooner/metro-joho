@@ -4,13 +4,22 @@
     "viewStations": "View All Stations",
     "home": "Home",
     "welcome": "Welcome to the Tokyo Metro Information Portal!",
+    "subtitle": "Real-time timetables and information for all {count} Tokyo Metro lines",
     "logoAlt": "Tokyo Metro logo"
   },
   "home": {
     "odptTitle": "ODPT",
     "odptDesc": "Find out more about the Open Data of Public Transportation Japan",
     "tmTitle": "Tokyo Metro",
-    "tmDesc": "Check out the official Tokyo Metro website for more information"
+    "tmDesc": "Check out the official Tokyo Metro website for more information",
+    "quickAccess": "Quick Access",
+    "exploreLines": "Explore Lines",
+    "exploreLinesDesc": "Browse all Tokyo Metro lines and their stations",
+    "exploreStations": "Explore Stations",
+    "exploreStationsDesc": "Search and view all Tokyo Metro stations",
+    "featuredLines": "Featured Lines",
+    "totalLines": "lines",
+    "totalStations": "stations"
   },
   "common": {
     "japanTime": "The current time in Japan is {time}"

@@ -4,13 +4,22 @@
     "viewStations": "모든 역 보기",
     "home": "홈",
     "welcome": "도쿄 메트로 정보 포털에 오신 것을 환영합니다!",
+    "subtitle": "전체 {count}개 도쿄 메트로 노선의 실시간 시간표 및 정보",
     "logoAlt": "도쿄 メトロ 로고"
   },
   "home": {
     "odptTitle": "ODPT",
     "odptDesc": "일본 대중교통 오픈 데이터에 대해 자세히 알아보기",
     "tmTitle": "도쿄 메트로",
-    "tmDesc": "더 많은 정보를 위해 공식 도쿄 메트로 웹사이트를 확인하세요"
+    "tmDesc": "더 많은 정보를 위해 공식 도쿄 메트로 웹사이트를 확인하세요",
+    "quickAccess": "빠른 액세스",
+    "exploreLines": "노선 탐색",
+    "exploreLinesDesc": "모든 도쿄 메트로 노선과 역 둘러보기",
+    "exploreStations": "역 탐색",
+    "exploreStationsDesc": "모든 도쿄 메트로 역 검색 및 보기",
+    "featuredLines": "주요 노선",
+    "totalLines": "개 노선",
+    "totalStations": "개 역"
   },
   "common": {
     "japanTime": "일본의 현재 시간은 {time}입니다."

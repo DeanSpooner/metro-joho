@@ -4,13 +4,22 @@
     "viewStations": "すべての駅を表示",
     "home": "ホーム",
     "welcome": "東京メトロ情報へようこそ！",
+    "subtitle": "全{count}路線のリアルタイム時刻表と情報",
     "logoAlt": "東京メトロロゴ"
   },
   "home": {
     "odptTitle": "ODPT",
     "odptDesc": "公共交通オープンデータ協議会について詳しく知る",
     "tmTitle": "東京メトロ",
-    "tmDesc": "東京メトロの公式サイトで詳細情報を確認する"
+    "tmDesc": "東京メトロの公式サイトで詳細情報を確認する",
+    "quickAccess": "クイックアクセス",
+    "exploreLines": "路線を探索",
+    "exploreLinesDesc": "すべての東京メトロ路線と駅を閲覧",
+    "exploreStations": "駅を探索",
+    "exploreStationsDesc": "すべての東京メトロ駅を検索・表示",
+    "featuredLines": "注目の路線",
+    "totalLines": "路線",
+    "totalStations": "駅"
   },
   "common": {
     "japanTime": "日本の現在時刻は{time}です。"
@@ -34,7 +43,7 @@
   },
   "timetable": {
     "title": "時刻表",
-    "departures": "本数",
+    "departures": "出発",
     "noData": "現在、時刻表データはありません。",
     "otherLines": "他路線",
     "none": "なし",

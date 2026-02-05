@@ -4,13 +4,22 @@
     "viewStations": "查看所有车站",
     "home": "首页",
     "welcome": "欢迎来到东京地铁信息门户！",
+    "subtitle": "全部{count}条东京地铁线路的实时时刻表和信息",
     "logoAlt": "东京地铁标志"
   },
   "home": {
     "odptTitle": "ODPT",
     "odptDesc": "详细了解日本公共交通开放数据",
     "tmTitle": "东京地铁",
-    "tmDesc": "访问东京地铁官方网站获取更多信息"
+    "tmDesc": "访问东京地铁官方网站获取更多信息",
+    "quickAccess": "快速访问",
+    "exploreLines": "探索线路",
+    "exploreLinesDesc": "浏览所有东京地铁线路和车站",
+    "exploreStations": "探索车站",
+    "exploreStationsDesc": "搜索和查看所有东京地铁车站",
+    "featuredLines": "精选线路",
+    "totalLines": "条线路",
+    "totalStations": "个车站"
   },
   "common": {
     "japanTime": "日本当前时间是 {time}"
